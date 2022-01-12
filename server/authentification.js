@@ -1,8 +1,9 @@
+require("dotenv").config();
+console.log(process.env.CLIENT_ID)
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(
   process.env.CLIENT_ID
 );
-require("dotenv").config({ path: "../.env" });
 const { Pool } = require("pg");
 const databaseConfig = { connectionString: process.env.DATABASE_URL };
 var session = require("express-session");

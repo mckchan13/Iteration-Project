@@ -39,7 +39,7 @@ export default function GoogleOAuthButton() {
     <div className="my-5">
       <GoogleLogin
         clientId={
-          "<CLIENT ID STRING FROM GOOGLE HERE>"
+          process.env.CLIENT_ID
         }
         buttonText="Login with Google"
         onSuccess={onLoginSuccess}
