@@ -1,8 +1,9 @@
+require("dotenv").config();
+console.log(process.env.CLIENT_ID)
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(
-  "<CLIENT ID STRING FROM GOOGLE HERE>"
+  process.env.CLIENT_ID
 );
-require("dotenv").config({ path: "../.env" });
 const { Pool } = require("pg");
 const databaseConfig = { connectionString: process.env.DATABASE_URL };
 var session = require("express-session");
@@ -16,7 +17,7 @@ const authentification = {
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience:
-        "467096301340-lskbsr95tqn59v25db47f1jsl5raq4g9.apps.googleusercontent.com",
+      process.env.CLIENT_ID,
     });
     if (!ticket) {
       return next({

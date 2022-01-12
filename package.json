@@ -43,6 +43,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "babel-loader": "^8.2.3",
+    "dotenv-webpack": "^7.0.3",
     "html-webpack-plugin": "^5.5.0",
     "nodemon": "^2.0.15",
     "postcss": "^8.4.5",
