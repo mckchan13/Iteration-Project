@@ -11,10 +11,9 @@ CREATE TABLE IF NOT EXISTS athletes (
 
 CREATE TABLE IF NOT EXISTS workout_card (
     "_id" serial NOT NULL, 
-    "workout_title" char NOT NULL,
-    "workout_content" char NOT NULL, 
+    "workout_title" varchar NOT NULL,
+    "workout_content" varchar NOT NULL, 
     "date" timestamp,
-    "tags" char,
     "athlete_id" serial REFERENCES athletes("_id"),
     CONSTRAINT "workout_card_id_pk" PRIMARY KEY ("_id")
 );

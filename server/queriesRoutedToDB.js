@@ -45,12 +45,13 @@ const queriesRouter = {
 
   //takes in athlete_id & workout_content from req.body and queries to add
   //entry to workout_card table in the database
+
   postWorkout: (req, res, next) => {
-    const { athlete_id, workout_content } = req.body;
-    // console.log(athlete_id, workout_content);
+    const { athlete_id, workout_content, workout_title } = req.body;
+    // console.log(athlete_id, workout_content, workout_title);
     pool
       .query(
-        `INSERT INTO workout_card (workout_content, date, athlete_id) VALUES ('${workout_content}', NOW(), ${athlete_id});`
+        `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}');`
       )
       .then((data) => {
         // console.log(data);
