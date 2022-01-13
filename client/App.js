@@ -12,9 +12,9 @@ import {
 } from "react-router-dom";
 import Cookies from "js-cookie";
 
-import LoginSignupPage from "./LoginSignupPage";
-import DashBoardContainer from "./DashboardContainer";
-import AthletePage from "./AthletePage";
+import LoginSignupPage from './pages/LoginSignupPage';
+import DashBoardContainer from "./pages/DashboardContainer";
+import AthletePage from "./pages/AthletePage";
 
 //All route should establish at the App level
 export default function App() {

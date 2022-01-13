@@ -7,9 +7,9 @@ import {
   Link,
 } from "react-router-dom";
 
-import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
-import GoogleOAuthButton from "./GoogleOAuthLogin";
+import LoginForm from "../components/LoginForm";
+import SignupForm from "../components/SignupForm";
+import GoogleOAuthButton from "../components/GoogleOAuthLogin";
 
 const LoginSignupPage = (props) => {
   return (

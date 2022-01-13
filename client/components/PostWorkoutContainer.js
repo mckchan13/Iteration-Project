@@ -7,7 +7,8 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import ChipInput from "material-ui-chip-input";
+// import ChipInput from "material-ui-chip-input";
+import ChipInput from "material-ui-chip-input"
 
 const useStyles = makeStyles({
   paper: {

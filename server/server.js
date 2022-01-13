@@ -5,8 +5,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const env = require("dotenv").config();
 const PORT = process.env.PORT || 3000;
-const queriesRouter = require("./queriesRoutedToDB");
-const authentification = require("./authentification");
+const queriesRouter = require("./controllers/queriesRoutedToDB");
+const authentification = require("./controllers/authentification");
 
 app.use(cors());
 
