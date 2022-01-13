@@ -46,23 +46,22 @@ const queriesRouter = {
   //takes in athlete_id & workout_content from req.body and queries to add
   //entry to workout_card table in the database
 
-  postWorkout: (req, res, next) => {
+  postWorkout: async (req, res, next) => {
     const { athlete_id, workout_content, workout_title } = req.body;
     // console.log(athlete_id, workout_content, workout_title);
-    pool
-      .query(
-        `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}');`
-      )
-      .then((data) => {
-        // console.log(data);
-        return next();
-      })
-      .catch((err) =>
-        next({
-          log: "error posting workout to workout_card table in database",
-          message: { err: `error received from postWorkout query: ${err}` },
-        })
-      );
+
+    try {
+      const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}') RETURNING _id`;
+
+      const post = await pool.query(query);
+      res.locals.post = post.rows[0]._id;
+      return next();
+    } catch (error) {
+      return next({
+        log: "error posting workout to workout_card table in database",
+        message: { err: `error received from postWorkout query: ${error}` },
+      });
+    }
   },
 
   //gets the workouts list from the DB as an array of workout objects
@@ -126,6 +125,23 @@ const queriesRouter = {
           },
         })
       );
+  },
+
+  postTag: async (req, res, next) => {
+    const { athlete_id, workout_id, tag } = req.body;
+    console.log(athlete_id, workout_id, tag);
+    try {
+      const query = `INSERT INTO tag (workout_id, tag, athlete_id) VALUES ('${workout_id}', '${tag}', '${athlete_id}') RETURNING _id`;
+
+      const post = await pool.query(query);
+      res.locals.tag = post.rows[0]._id;
+      return next();
+    } catch (error) {
+      return next({
+        log: "error posting workout to tag table in database",
+        message: { err: `error received from postTag query: ${error}` },
+      });
+    }
   },
 };
 

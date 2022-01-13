@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS subscription (
 
 CREATE TABLE IF NOT EXISTS tag (
     "_id" serial NOT NULL,
+    "tag" varchar NOT NULL,
     "workout_id" serial REFERENCES workout_card("_id") NOT NULL,
     "athlete_id" serial REfERENCES athletes("_id") NOT NULL,
     CONSTRAINT "tag_id_pk" PRIMARY KEY ("_id")
