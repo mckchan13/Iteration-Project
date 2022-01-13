@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Feed from "./Feed";
-import AthleteProfile from "./AthleteProfile";
-import Header from "./Header";
+import Feed from "../components/Feed";
+import AthleteProfile from "../components/AthleteProfile";
+import Header from "../components/Header";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
 
