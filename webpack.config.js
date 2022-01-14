@@ -51,13 +51,9 @@ module.exports = {
     //to render client-side
     historyApiFallback: true,
     proxy: {
-      "/workouts-list/**": "http://localhost:3000",
-      "/post-workout/**": "http://localhost:3000",
-      "/post-tag/**": "http://localhost:3000",
-      "/api/google-auth/**": "http://localhost:3000",
-      // "/mainpage": "http://localhost:8080/mainpage",
-      "/athlete-workouts/**": "http://localhost:3000",
-      "/athlete-info": "http://localhost:3000",
+      "/api/auth/**": "http://localhost:3000/",
+      "/api/athlete/**": "http://localhost:3000/",
+      "/api/post/**": "http://localhost:3000/",
     },
   },
 };

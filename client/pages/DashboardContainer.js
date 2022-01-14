@@ -14,7 +14,7 @@ const DashboardContainer = (props) => {
   const getWorkOutsList = () => {
     // console.log("getworkoutlist function is being invoked");
     return (
-      fetch("/workouts-list")
+      fetch("/api/post/workoutslist")
         .then((res) => res.json())
         // set state
         .then((data) => setWorkoutsList(data.workoutsList))

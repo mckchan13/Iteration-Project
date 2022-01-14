@@ -22,7 +22,7 @@ const PostWorkoutContainer = ({ getWorkOutsList }) => {
     };
 
     const result = await axios.post(
-      "/post-workout",
+      "/api/post/workout",
       { athlete_id: athleteId, workout_title: title, workout_content: body },
       headers
     );
@@ -34,7 +34,7 @@ const PostWorkoutContainer = ({ getWorkOutsList }) => {
     if (tags.length) {
       tags.map(async (elem) => {
         const tag_result = await axios.post(
-          "/post-tag",
+          "/api/post/tag",
           { tag: elem, athlete_id: athleteId, workout_id: postId },
           headers
         );
