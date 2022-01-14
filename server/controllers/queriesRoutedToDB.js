@@ -64,6 +64,47 @@ const queriesRouter = {
     }
   },
 
+  getWorkout: async (req, res, next) => {
+    const { post } = req.params;
+    // console.log(athlete_id, workout_content, workout_title);
+
+    try {
+      const query = `SELECT *
+        FROM workout_card
+        WHERE _id = ${postId}`;
+
+      const post = await pool.query(query);
+      res.locals.post = post.rows[0];
+      return next();
+    } catch (error) {
+      return next({
+        log: "error getting workout to workout_card table in database",
+        message: { err: `error received from getWorkout query: ${error}` },
+      });
+    }
+  },
+
+  getAthleteBySearch: async (req, res, next) => {
+    const { athlete } = req.query;
+
+    try {
+      const query = `SELECT *
+        FROM athletes
+        WHERE athlete_name = ${athlete}`;
+
+      const athlete = await pool.query(query);
+      res.locals.athlete = athlete.rows[0];
+      return next();
+    } catch (error) {
+      return next({
+        log: "error getting athlete to athletes table in database",
+        message: {
+          err: `error received from getAthleteBySearch query: ${error}`,
+        },
+      });
+    }
+  },
+
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsByAthlete: (req, res, next) => {
     const athleteId = req.query.id;

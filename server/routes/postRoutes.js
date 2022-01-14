@@ -14,7 +14,11 @@ Router.post("/workout", queriesRouter.postWorkout, (req, res) => {
   return res.status(200).json({ post: res.locals.post });
 });
 
-//handle tag 
+Router.get("/workout/:post", queriesRouter.getWorkout, (req, res) => {
+  return res.status(200).json(res.locals.post);
+});
+
+//handle tag
 Router.post("/tag", queriesRouter.postTag, (req, res) => {
   return res.status(200).send("tag created");
 });

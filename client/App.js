@@ -7,14 +7,13 @@ import {
   Link,
   useNavigate,
   useLocation,
-  Navigate,
-  Outlet,
 } from "react-router-dom";
 import Cookies from "js-cookie";
 
-import LoginSignupPage from './pages/LoginSignupPage';
+import LoginSignupPage from "./pages/LoginSignupPage";
 import DashBoardContainer from "./pages/DashboardContainer";
 import AthletePage from "./pages/AthletePage";
+import PostDetailsPage from "./pages/PostDetailsPage";
 
 //All route should establish at the App level
 export default function App() {
@@ -27,7 +26,9 @@ export default function App() {
     } else {
       return (
         <div className="grid place-content-center">
-          <h1 className="text-3xl font-extrabold font-sans text-center py-10">Please log in to continue</h1>
+          <h1 className="text-3xl font-extrabold font-sans text-center py-10">
+            Please log in to continue
+          </h1>
           <button
             onClick={() => {
               console.log("failed to log in");
@@ -49,20 +50,17 @@ export default function App() {
 
         <Route
           path="dashboard"
-          element={
-            <RequireAuth Component={DashBoardContainer}>
-              {/* <DashBoardContainer /> */}
-            </RequireAuth>
-          }
+          element={<RequireAuth Component={DashBoardContainer}></RequireAuth>}
         />
 
         <Route
           path="athletepage/:athleteId"
-          element={
-            <RequireAuth Component={AthletePage}>
-              {/* <AthletePage /> */}
-            </RequireAuth>
-          }
+          element={<RequireAuth Component={AthletePage}></RequireAuth>}
+        />
+
+        <Route
+          path="workoutPost/:post"
+          element={<RequireAuth Component={PostDetailsPage}></RequireAuth>}
         />
       </Routes>
     </div>
