@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const { node } = require("webpack");
-const Dotenv = require('dotenv-webpack');
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -53,6 +53,7 @@ module.exports = {
     proxy: {
       "/workouts-list/**": "http://localhost:3000",
       "/post-workout/**": "http://localhost:3000",
+      "/post-tag/**": "http://localhost:3000",
       "/api/google-auth/**": "http://localhost:3000",
       // "/mainpage": "http://localhost:8080/mainpage",
       "/athlete-workouts/**": "http://localhost:3000",

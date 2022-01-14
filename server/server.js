@@ -35,7 +35,11 @@ app.get("/athlete-info", queriesRouter.getAthleteInfo, (req, res) => {
 
 //handle post-workout route to add a workout to workout_card table
 app.post("/post-workout", queriesRouter.postWorkout, (req, res) => {
-  return res.status(200).send("workout posted");
+  return res.status(200).json({ post: res.locals.post });
+});
+
+app.post("/post-tag", queriesRouter.postTag, (req, res) => {
+  return res.status(200).send("tag created");
 });
 
 app.post(
