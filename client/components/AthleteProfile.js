@@ -6,7 +6,7 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
   const history = useNavigate();
 
   useEffect(() => {
-    fetch(`/athlete-info?id=${athleteId}`)
+    fetch(`/api/athlete/info?id=${athleteId}`)
       .then((data) => data.json())
       .then(({ athleteName }) => {
         setAthleteName(athleteName);

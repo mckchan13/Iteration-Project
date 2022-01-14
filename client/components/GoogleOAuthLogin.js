@@ -15,7 +15,7 @@ export default function GoogleOAuthButton() {
   const onLoginSuccess = async (googleResponse) => {
     console.log("Login successful");
 
-    const serverResponse = await fetch("/api/google-auth", {
+    const serverResponse = await fetch("/api/auth/google", {
       method: "POST",
       body: JSON.stringify({
         token: googleResponse.tokenId,

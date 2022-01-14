@@ -9,7 +9,7 @@ const AthletePage = ({ athleteId }) => {
   const [workoutsList, setWorkoutsList] = useState([]);
 
   const params = useParams();
-  // console.log(params, "<- params");
+  console.log(params, "<- params");
   if (!athleteId) athleteId = Cookies.get("athleteId");
   if (params.athleteId) athleteId = params.athleteId;
   // console.log("athleteId after useParams:", athleteId);
@@ -17,7 +17,7 @@ const AthletePage = ({ athleteId }) => {
   //handle get request to find the workouts for a single athlete (from the cookies athleteId set on login)
   const getWorkOutsList = () => {
     return (
-      fetch(`/athlete-workouts?id=${athleteId}`)
+      fetch(`/api/athlete/workouts?id=${athleteId}`)
         .then((res) => res.json())
         // set state
         .then((data) => setWorkoutsList(data.workoutsList))
