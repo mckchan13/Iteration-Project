@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import PostWorkoutContainer from "../components/PostWorkoutContainer";
-import Feed from "../components/Feed";
-import Header from "../components/Header";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import React, { useState, useEffect } from 'react';
+import PostWorkoutContainer from '../components/PostWorkoutContainer';
+import Feed from '../components/Feed';
+import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const DashboardContainer = (props) => {
   const [workoutsList, setWorkoutsList] = useState([]);
   const history = useNavigate();
-  const athleteId = Cookies.get("athleteId");
+  const athleteId = Cookies.get('athleteId');
 
   //handle post function takes in nothing
   const getWorkOutsList = () => {
     // console.log("getworkoutlist function is being invoked");
     return (
-      fetch("/api/post/workoutslist")
+      fetch('/api/post/workoutslist')
         .then((res) => res.json())
         // set state
         .then((data) => setWorkoutsList(data.workoutsList))
@@ -24,7 +24,7 @@ const DashboardContainer = (props) => {
   // on mount fetch workout-list from server
   useEffect(() => {
     getWorkOutsList();
-  }, []);
+  }, [workoutsList]);
 
   return (
     <React.Fragment>
