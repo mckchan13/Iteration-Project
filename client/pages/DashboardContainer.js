@@ -9,6 +9,7 @@ const DashboardContainer = (props) => {
   const [workoutsList, setWorkoutsList] = useState([]);
   const history = useNavigate();
   const athleteId = Cookies.get("athleteId");
+  
 
   //handle post function takes in nothing
   const getWorkOutsList = () => {

@@ -14,6 +14,7 @@ import LoginSignupPage from "./pages/LoginSignupPage";
 import DashBoardContainer from "./pages/DashboardContainer";
 import AthletePage from "./pages/AthletePage";
 import PostDetailsPage from "./pages/PostDetailsPage";
+import ResultsPage from "./pages/ResultsPage";
 
 //All route should establish at the App level
 export default function App() {
@@ -61,6 +62,11 @@ export default function App() {
         <Route
           path="workoutPost/:post"
           element={<RequireAuth Component={PostDetailsPage}></RequireAuth>}
+        />
+
+        <Route
+          path="results"
+          element={<RequireAuth Component={ResultsPage}></RequireAuth>}
         />
       </Routes>
     </div>

@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 const authRouter = require('./routes/authRoutes');
 const postRouter = require('./routes/postRoutes');
 const athleteRouter = require('./routes/athleteRoutes');
+const searchRouter = require('./routes/searchRoutes')
 
 
 /**
@@ -28,6 +29,7 @@ app.get("/", (req, res, next) => {
 app.use('/api/auth', authRouter);
 app.use('/api/post', postRouter);
 app.use('/api/athlete', athleteRouter);
+app.use("/api/search", searchRouter);
 
 //handle page not found
 app.use((req, res) =>
