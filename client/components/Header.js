@@ -27,7 +27,7 @@ const Header = () => {
     <div className="flex justify-between items-center px-11 py-4 bg-primary text-white">
       <h1 className="text-2xl font-bold">fithaus</h1>
       <Search />
-      <ul class="flex ">
+      <ul className="flex ">
         <li className="pr-2 hover:text-blue100">
           <a href="#">Home</a>
         </li>
