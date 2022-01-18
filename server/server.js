@@ -1,21 +1,22 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const path = require("path");
-const bodyParser = require("body-parser");
-const env = require("dotenv").config();
+require("dotenv").config();
 const PORT = process.env.PORT || 3000;
-const authRouter = require('./routes/authRoutes');
-const postRouter = require('./routes/postRoutes');
-const athleteRouter = require('./routes/athleteRoutes');
-const searchRouter = require('./routes/searchRoutes')
-
+const authRouter = require("./routes/authRoutes");
+const postRouter = require("./routes/postRoutes");
+const athleteRouter = require("./routes/athleteRoutes");
+const searchRouter = require("./routes/searchRoutes");
 
 /**
- * enable http request protocol 
+ * enable http request protocol
+ *
  */
-app.use(cors());
 
+app.use(cors());
 
 /**
  * handle parsing request body
@@ -24,12 +25,22 @@ app.use(express.json());
 
 app.get("/", (req, res, next) => {
   return res.status(200).send("the server is working");
-})
+});
 
-app.use('/api/auth', authRouter);
-app.use('/api/post', postRouter);
-app.use('/api/athlete', athleteRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
+app.use("/api/athlete", athleteRouter);
 app.use("/api/search", searchRouter);
+
+io.on("connection", (socket) => {
+  socket.on("join", () => {
+    console.log("user has joined");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
 
 //handle page not found
 app.use((req, res) =>
@@ -48,6 +59,6 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(PORT, () => console.log(`Listening at port ${PORT}`));
+server.listen(PORT, () => console.log(`Listening at port ${PORT}`));
 
 module.exports = app;
