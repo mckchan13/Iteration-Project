@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 const AthleteProfile = ({ athleteId, ...rest }) => {
   const [athleteName, setAthleteName] = useState("Awesome Athlete");
-  const [subscript, setsubscription] = useState("Follow");
+  const [subscript, setSubscription] = useState("Follow");
   const history = useNavigate();
   const data = {
     currentAthletePageId: athleteId,
@@ -35,7 +35,7 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
       );
       let res = await response.json();
       let followingStatus = res.followingStatus;
-      setsubscription(followingStatus);
+      setSubscription(followingStatus);
     } catch (err) {
       console.log(err);
     }
@@ -63,7 +63,7 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
       });
       let res = await response.json();
       if (res === "Following") {
-        setsubscription("Unfollow");
+        setSubscription("Unfollow");
       }
     }
 
@@ -88,7 +88,7 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
         .then((res) => {
           // console.log(res);
           if (res === "Unfollow") {
-            setsubscription("Follow");
+            setSubscription("Follow");
           }
         });
     }
