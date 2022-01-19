@@ -36,9 +36,7 @@ export default function GoogleOAuthButton() {
   return (
     <div className="my-5">
       <GoogleLogin
-        clientId={
-          process.env.CLIENT_ID
-        }
+        clientId={process.env.CLIENT_ID}
         buttonText="Login with Google"
         onSuccess={onLoginSuccess}
         onFailure={onLoginFailure}
