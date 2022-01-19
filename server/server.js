@@ -1,20 +1,28 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const http = require("http");
+const io = require("socket.io");
 const path = require("path");
-const bodyParser = require("body-parser");
-const env = require("dotenv").config();
+require("dotenv").config();
 const PORT = process.env.PORT || 3000;
-const authRouter = require('./routes/authRoutes');
-const postRouter = require('./routes/postRoutes');
-const athleteRouter = require('./routes/athleteRoutes');
-
+const authRouter = require("./routes/authRoutes");
+const postRouter = require("./routes/postRoutes");
+const athleteRouter = require("./routes/athleteRoutes");
+const searchRouter = require("./routes/searchRoutes");
+const subscriptionRouter = require("./routes/subscriptionRoutes");
+const cookieParser = require("cookie-parser");
 
 /**
- * enable http request protocol 
+ * enable http request protocol
  */
-app.use(cors());
+app.use(cookieParser());
 
+/**
+ * enable http request protocol
+ */
+
+app.use(cors());
 
 /**
  * handle parsing request body
@@ -23,11 +31,12 @@ app.use(express.json());
 
 app.get("/", (req, res, next) => {
   return res.status(200).send("the server is working");
-})
+});
 
-app.use('/api/auth', authRouter);
-app.use('/api/post', postRouter);
-app.use('/api/athlete', athleteRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
+app.use("/api/athlete", athleteRouter, subscriptionRouter);
+app.use("/api/search", searchRouter);
 
 //handle page not found
 app.use((req, res) =>
