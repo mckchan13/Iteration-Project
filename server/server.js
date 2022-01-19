@@ -9,6 +9,12 @@ const authRouter = require("./routes/authRoutes");
 const postRouter = require("./routes/postRoutes");
 const athleteRouter = require("./routes/athleteRoutes");
 const subcriptionRouter = require("./routes/subcriptionRoutes");
+const cookieParser = require("cookie-parser");
+
+/**
+ * enable http request protocol
+ */
+app.use(cookieParser());
 
 /**
  * enable http request protocol

@@ -3,7 +3,7 @@ const Router = express.Router();
 const subcription = require("../controllers/subcription");
 
 //first query to check if the is relationship exit
-Router.post("/subcriptionStatus", subcription.relationship, (req, res) => {
+Router.get("/subcriptionStatusTo", subcription.relationship, (req, res) => {
   console.log("there is a relationship");
   const followingStatus = res.locals.followingStatus;
   return res.status(200).json({ followingStatus });

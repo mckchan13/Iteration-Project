@@ -14,7 +14,11 @@ const subcriptionRouter = {
 
   //first query to check if the is relationship exit
   relationship: async (req, res, next) => {
-    const { currentAthletePageId, currentUserId } = req.body;
+    const currentUserId = req.cookies["athleteId"];
+
+    const currentAthletePageId = req.query.currentAthletePageId;
+    if (currentAthletePageId === undefined)
+      return next({ log: "no currentAtheletePageId found" });
     try {
       const query = `SELECT _id FROM subscription WHERE athlete_id = '${currentUserId}' AND following = '${currentAthletePageId}';`;
       const checking = await pool.query(query);

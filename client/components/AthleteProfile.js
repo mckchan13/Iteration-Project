@@ -23,14 +23,16 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
   useEffect(async () => {
     try {
       console.log("fetch request for subcription status");
-      const response = await fetch(`/api/athlete/subcriptionStatus`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/athlete/subcriptionStatusTo?currentAthletePageId=${athleteId}`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       let res = await response.json();
       let followingStatus = res.followingStatus;
       setSubcription(followingStatus);
