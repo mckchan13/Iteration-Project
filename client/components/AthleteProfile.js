@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 const AthleteProfile = ({ athleteId, ...rest }) => {
   const [athleteName, setAthleteName] = useState("Awesome Athlete");
-  const [subcript, setSubcription] = useState("Follow");
+  const [subscript, setsubscription] = useState("Follow");
   const history = useNavigate();
   const data = {
     currentAthletePageId: athleteId,
@@ -22,9 +22,9 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
 
   useEffect(async () => {
     try {
-      console.log("fetch request for subcription status");
+      console.log("fetch request for subscription status");
       const response = await fetch(
-        `/api/athlete/subcriptionStatusTo?currentAthletePageId=${athleteId}`,
+        `/api/athlete/subscriptionStatusTo?currentAthletePageId=${athleteId}`,
         {
           method: "GET",
           mode: "cors",
@@ -35,22 +35,25 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
       );
       let res = await response.json();
       let followingStatus = res.followingStatus;
-      setSubcription(followingStatus);
+      setsubscription(followingStatus);
     } catch (err) {
       console.log(err);
     }
   }, []);
 
-  const subcription = async () => {
+  const subscription = async () => {
     console.log(
       `currentUser = ${data.currentUserId} is following ${data.currentAthletePageId}`
     );
 
     //follow a user
-    if (subcript === "Follow") {
-      console.log(subcript, "running fetch to the backend to add relationship");
-      // go fetch request to add into follow link into the subcription table
-      const response = await fetch(`/api/athlete/subcription`, {
+    if (subscript === "Follow") {
+      console.log(
+        subscript,
+        "running fetch to the backend to add relationship"
+      );
+      // go fetch request to add into follow link into the subscription table
+      const response = await fetch(`/api/athlete/subscription`, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -60,15 +63,18 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
       });
       let res = await response.json();
       if (res === "Following") {
-        setSubcription("Unfollow");
+        setsubscription("Unfollow");
       }
     }
 
     //un-follow a user
-    if (subcript === "Unfollow" || subcript === "Following") {
-      // go fetch request to add into follow link into the subcription table
-      console.log(subcript, "running fetch to the backend to add relationship");
-      fetch(`/api/athlete/subcription`, {
+    if (subscript === "Unfollow" || subscript === "Following") {
+      // go fetch request to add into follow link into the subscription table
+      console.log(
+        subscript,
+        "running fetch to the backend to add relationship"
+      );
+      fetch(`/api/athlete/subscription`, {
         method: "DELETE",
         mode: "cors",
         headers: {
@@ -82,7 +88,7 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
         .then((res) => {
           // console.log(res);
           if (res === "Unfollow") {
-            setSubcription("Follow");
+            setsubscription("Follow");
           }
         });
     }
@@ -100,10 +106,10 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
         </button>
         <button
           type="submit"
-          onClick={() => subcription()}
+          onClick={() => subscription()}
           className="bg-primary content-center text-white font-medium py-1 px-4 border  rounded-lg tracking-wide mr-1 hover:bg-gray-100 first-letter  "
         >
-          {subcript}
+          {subscript}
         </button>
       </div>
       <h3 className="text-3xl text-center pl-5 mx-20">{athleteName} Profile</h3>

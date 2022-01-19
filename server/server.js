@@ -10,7 +10,7 @@ const authRouter = require("./routes/authRoutes");
 const postRouter = require("./routes/postRoutes");
 const athleteRouter = require("./routes/athleteRoutes");
 const searchRouter = require("./routes/searchRoutes");
-const subcriptionRouter = require("./routes/subcriptionRoutes");
+const subscriptionRouter = require("./routes/subscriptionRoutes");
 const cookieParser = require("cookie-parser");
 
 /**
@@ -35,7 +35,7 @@ app.get("/", (req, res, next) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
-app.use("/api/athlete", athleteRouter, subcriptionRouter);
+app.use("/api/athlete", athleteRouter, subscriptionRouter);
 app.use("/api/search", searchRouter);
 
 //handle page not found

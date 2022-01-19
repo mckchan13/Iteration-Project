@@ -6,7 +6,7 @@ const databaseConfig = { connectionString: process.env.DATABASE_URL };
 //creating a new pool
 const pool = new Pool(databaseConfig);
 
-const subcriptionRouter = {
+const subscriptionRouter = {
   query: (text, params, callback) => {
     console.log("executed query", text);
     return pool.query(text, params, callback);
@@ -29,13 +29,13 @@ const subcriptionRouter = {
       return next();
     } catch (error) {
       return next({
-        log: "error relationship subcription into the database",
+        log: "error relationship subscription into the database",
         message: { err: `error received from relationship query: ${err}` },
       });
     }
   },
 
-  //Insert subcription into the subcription table
+  //Insert subscription into the subscription table
   addFollower: async (req, res, next) => {
     const { currentAthletePageId, currentUserId } = req.body;
     console.log(
@@ -49,13 +49,13 @@ const subcriptionRouter = {
       return next();
     } catch (error) {
       return next({
-        log: "error insert subcription into the database",
+        log: "error insert subscription into the database",
         message: { err: `error received from addFollower query: ${err}` },
       });
     }
   },
 
-  //Remove subcription into the subcription table
+  //Remove subscription into the subscription table
   deleteFollower: async (req, res, next) => {
     const { currentAthletePageId, currentUserId } = req.body;
     console.log(
@@ -69,11 +69,11 @@ const subcriptionRouter = {
       return next();
     } catch (error) {
       return next({
-        log: "error deleteing subcription into the database",
+        log: "error deleteing subscription into the database",
         message: { err: `error received from deleteFollower query: ${err}` },
       });
     }
   },
 };
 
-module.exports = subcriptionRouter;
+module.exports = subscriptionRouter;

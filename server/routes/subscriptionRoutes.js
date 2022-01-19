@@ -1,24 +1,24 @@
 const express = require("express");
 const Router = express.Router();
-const subcription = require("../controllers/subcription");
+const subscription = require("../controllers/subscription");
 
 //first query to check if the is relationship exit
-Router.get("/subcriptionStatusTo", subcription.relationship, (req, res) => {
+Router.get("/subscriptionStatusTo", subscription.relationship, (req, res) => {
   console.log("there is a relationship");
   const followingStatus = res.locals.followingStatus;
   return res.status(200).json({ followingStatus });
 });
 
 //handle inserting follow relationship
-Router.post("/subcription", subcription.addFollower, (req, res) => {
-  // res.locals.subcriptStatus = "Following";
+Router.post("/subscription", subscription.addFollower, (req, res) => {
+  // res.locals.subscriptStatus = "Following";
   console.log("post request for adding subscription");
   return res.status(200).json("Following");
 });
 
 //handle delete follow relationship
-Router.delete("/subcription", subcription.deleteFollower, (req, res) => {
-  // res.locals.subcriptStatus = "Unfollow";
+Router.delete("/subscription", subscription.deleteFollower, (req, res) => {
+  // res.locals.subscriptStatus = "Unfollow";
   console.log("unfollowing a user");
   return res.status(200).json("Unfollow");
 });
