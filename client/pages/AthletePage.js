@@ -9,7 +9,7 @@ const AthletePage = ({ athleteId }) => {
   const [workoutsList, setWorkoutsList] = useState([]);
 
   const params = useParams();
-  console.log(params, "<- params");
+  // console.log(params, "<- params");
   if (!athleteId) athleteId = Cookies.get("athleteId");
   if (params.athleteId) athleteId = params.athleteId;
   // console.log("athleteId after useParams:", athleteId);
