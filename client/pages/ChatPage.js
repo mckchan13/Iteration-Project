@@ -5,7 +5,7 @@ const ChatPage = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-      const newSocket = io(`http://localhost:8080`);
+      const newSocket = io(`http://localhost:3000`);
       console.log(newSocket)
     setSocket(newSocket);
     return () => newSocket.close();
@@ -14,7 +14,7 @@ const ChatPage = () => {
   return (
     <div>
       <header>React Chat</header>
-      {socket ? (
+      {socket !== null ? (
         <div>
           connected
           

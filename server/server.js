@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const { createServer } = require("http");
+const {Server } = require("socket.io");
 const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
@@ -13,7 +13,12 @@ const searchRouter = require("./routes/searchRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoutes");
 const cookieParser = require("cookie-parser");
 
-
+const httpServer = createServer();
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:8080",
+  },
+});
 /**
  * enable http request protocol
  */
@@ -70,6 +75,6 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-http.listen(PORT, () => console.log(`Listening at port ${PORT}`));
+httpServer.listen(PORT, () => console.log(`Listening at port ${PORT}`));
 
 module.exports = app;
