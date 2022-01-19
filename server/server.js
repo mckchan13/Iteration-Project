@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const http = require("http")
-const io = require("socket.io")
+const http = require("http").Server(app);
 const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
@@ -10,6 +9,7 @@ const authRouter = require("./routes/authRoutes");
 const postRouter = require("./routes/postRoutes");
 const athleteRouter = require("./routes/athleteRoutes");
 const searchRouter = require("./routes/searchRoutes");
+
 
 /**
  * enable http request protocol
@@ -59,6 +59,6 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(PORT, () => console.log(`Listening at port ${PORT}`));
+http.listen(PORT, () => console.log(`Listening at port ${PORT}`));
 
 module.exports = app;
