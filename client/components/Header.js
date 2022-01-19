@@ -1,26 +1,6 @@
-// import { AppBar, Toolbar, Typography } from "@material-ui/core";
-// import React from "react";
-
-// export default function Header() {
-//   const displayDesktop = () => {
-//     return (
-//       <Toolbar>
-//         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-//           fit haús
-//         </Typography>
-//       </Toolbar>
-//     );
-//   };
-
-//   return (
-//     <header>
-//       <AppBar position="static">{displayDesktop()}</AppBar>
-//     </header>
-//   );
-// }
-
 import React from "react";
 import Search from "./Search";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -29,13 +9,13 @@ const Header = () => {
       <Search />
       <ul className="flex ">
         <li className="pr-2 hover:text-blue100">
-          <a href="#">Home</a>
-        </li>
-        <li className="pr-2 hover:text-blue100">
           <a href="#">About</a>
         </li>
+        <li className="pr-2 hover:text-blue100">
+          <a href="#">Chat</a>
+        </li>
         <li className="hover:text-blue100">
-          <a href="#">Port</a>
+          <a href="#">Signout</a>
         </li>
       </ul>
     </div>

@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const { createServer } = require("http");
-const {Server } = require("socket.io");
+const { Server } = require("socket.io");
 const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
@@ -12,27 +12,20 @@ const athleteRouter = require("./routes/athleteRoutes");
 const searchRouter = require("./routes/searchRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoutes");
 const cookieParser = require("cookie-parser");
+const socketUtil = require("./util/socketUtil.js");
 
-const httpServer = createServer();
+const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:8080",
   },
 });
-/**
- * enable http request protocol
- */
+
+app.use(express.json());
 
 app.use(cors());
-/**
- * enable http request protocol
- */
-app.use(cookieParser());
 
-/**
- * handle parsing request body
- */
-app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res, next) => {
   return res.status(200).send("the server is working");
@@ -44,19 +37,30 @@ app.use("/api/post", postRouter);
 app.use("/api/athlete", athleteRouter, subscriptionRouter);
 app.use("/api/search", searchRouter);
 
+//socket.io setup
 io.on("connection", (socket) => {
-  console.log("a user is conencted");
+  //when connected
+  console.log("a user is connected", socket.id);
 
-  socket.on("join", () => {
-    console.log("user joined");
+  //displaying online users to all clients
+  socket.on("addUser", (userId) => {
+    socketUtil.addUser(userId, socket.id);
+    io.emit("getUsers", socketUtil.users);
   });
 
+  //send and get messages
+  socket.on("sendMessage", ({ senderId, recieverId, text }) => {
+    const reciever = getUser(recieverId);
+    io.to(reciever.socketId).emit("getMessage", { senderId, text });
+  });
+
+  //when disconnect
   socket.on("disconnect", () => {
-    console.log("user left");
+    console.log("user left", socket.id);
+    socketUtil.removeUser(socket.id);
+    io.emit("getUsers", socketUtil.users);
   });
 });
-
-// Socket.io
 
 //handle page not found
 app.use((req, res) =>
