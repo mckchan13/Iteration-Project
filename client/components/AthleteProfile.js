@@ -116,7 +116,6 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
           {subscript}
         </button>
       </div>
-      <h3 className="text-3xl text-center pl-5 mx-20">{athleteName} Profile</h3>
     </React.Fragment>
   );
 };
