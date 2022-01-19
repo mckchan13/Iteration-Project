@@ -51,7 +51,7 @@ const queriesRouter = {
     // console.log(athlete_id, workout_content, workout_title);
 
     try {
-      const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}') RETURNING _id`;
+      const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id, vector) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}', to_tsvector('${workout_content}')) RETURNING _id; `;
 
       const post = await pool.query(query);
       res.locals.post = post.rows[0]._id;
@@ -84,16 +84,31 @@ const queriesRouter = {
     }
   },
 
-  getAthleteBySearch: async (req, res, next) => {
-    const { athlete } = req.query;
+  getSearchResult: async (req, res, next) => {
+    const { search } = req.query;
 
     try {
-      const query = `SELECT *
+      let result = {}
+      const query1 = `SELECT *
+        FROM workout_card
+        WHERE vector @@ to_tsquery('${search}')`;
+      
+      const query2 = `SELECT *
         FROM athletes
-        WHERE athlete_name = ${athlete}`;
+        WHERE athlete_name ILIKE '%${search}%'`;
+      
+      const query3 = `SELECT *
+        FROM tag
+        WHERE tag ILIKE '%${search}%'`;
 
-      const athlete = await pool.query(query);
-      res.locals.athlete = athlete.rows[0];
+      const workoutResult = await pool.query(query1);
+      const athleteResult = await pool.query(query2);
+      const tagResult = await pool.query(query3);
+      result.workout = workoutResult.rows[0];
+      result.athlete = athleteResult.rows[0];
+      result.tag = tagResult.rows[0];
+      
+      res.locals.results = result
       return next();
     } catch (error) {
       return next({

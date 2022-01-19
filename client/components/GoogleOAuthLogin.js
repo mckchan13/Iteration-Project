@@ -27,12 +27,10 @@ export default function GoogleOAuthButton() {
       //after cookie with userId is received in response, gets the cookie on the front-end
       //and sets the state with it
       .then(() => {
+        history("dashboard");
         console.log("OAuth verification successful");
       })
       .catch((err) => console.log("error received from fetch post:", err));
-
-    //force to redirect, have to await properly
-    await history("dashboard");
   };
 
   return (

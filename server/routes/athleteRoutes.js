@@ -8,11 +8,6 @@ Router.get("/workouts", queriesRouter.getWorkoutsByAthlete, (req, res) => {
   return res.status(200).json({ workoutsList });
 });
 
-Router.get("/search", queriesRouter.getAthleteBySearch, (req, res) => {
-  const { athlete } = res.locals;
-  return res.status(200).json(athlete);
-});
-
 //handle request to get the name of the athlete by the Id
 Router.get("/info", queriesRouter.getAthleteInfo, (req, res) => {
   const { athleteName } = res.locals;
