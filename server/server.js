@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
@@ -12,17 +13,16 @@ const searchRouter = require("./routes/searchRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoutes");
 const cookieParser = require("cookie-parser");
 
-/**
- * enable http request protocol
- */
-app.use(cookieParser());
-
 
 /**
  * enable http request protocol
  */
 
 app.use(cors());
+/**
+ * enable http request protocol
+ */
+app.use(cookieParser());
 
 /**
  * handle parsing request body
@@ -33,10 +33,25 @@ app.get("/", (req, res, next) => {
   return res.status(200).send("the server is working");
 });
 
+//
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/athlete", athleteRouter, subscriptionRouter);
 app.use("/api/search", searchRouter);
+
+io.on("connection", (socket) => {
+  console.log("a user is conencted");
+
+  socket.on("join", () => {
+    console.log("user joined");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user left");
+  });
+});
+
+// Socket.io
 
 //handle page not found
 app.use((req, res) =>

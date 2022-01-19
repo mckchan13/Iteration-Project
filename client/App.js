@@ -15,6 +15,7 @@ import DashBoardContainer from "./pages/DashboardContainer";
 import AthletePage from "./pages/AthletePage";
 import PostDetailsPage from "./pages/PostDetailsPage";
 import ResultsPage from "./pages/ResultsPage";
+import ChatPage from "./pages/ChatPage";
 
 //All route should establish at the App level
 export default function App() {
@@ -67,6 +68,11 @@ export default function App() {
         <Route
           path="results"
           element={<RequireAuth Component={ResultsPage}></RequireAuth>}
+        />
+
+        <Route
+          path="chat"
+          element={<RequireAuth Component={ChatPage}></RequireAuth>}
         />
       </Routes>
     </div>
