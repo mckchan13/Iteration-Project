@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const http = require("http")
+const io = require("socket.io")
 const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
@@ -32,15 +32,15 @@ app.use("/api/post", postRouter);
 app.use("/api/athlete", athleteRouter);
 app.use("/api/search", searchRouter);
 
-io.on("connection", (socket) => {
-  socket.on("join", () => {
-    console.log("user has joined");
-  });
+// io.on("connection", (socket) => {
+//   socket.on("join", () => {
+//     console.log("user has joined");
+//   });
 
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("user disconnected");
+//   });
+// });
 
 //handle page not found
 app.use((req, res) =>
@@ -59,6 +59,6 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-server.listen(PORT, () => console.log(`Listening at port ${PORT}`));
+app.listen(PORT, () => console.log(`Listening at port ${PORT}`));
 
 module.exports = app;

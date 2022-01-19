@@ -10,7 +10,6 @@ const DashboardContainer = (props) => {
   const history = useNavigate();
   const athleteId = Cookies.get("athleteId");
   
-
   //handle post function takes in nothing
   const getWorkOutsList = () => {
     // console.log("getworkoutlist function is being invoked");
@@ -21,7 +20,6 @@ const DashboardContainer = (props) => {
         .then((data) => setWorkoutsList(data.workoutsList))
     );
   };
-
   // on mount fetch workout-list from server
   useEffect(() => {
     getWorkOutsList();
