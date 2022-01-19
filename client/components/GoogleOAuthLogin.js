@@ -31,16 +31,14 @@ export default function GoogleOAuthButton() {
       })
       .catch((err) => console.log("error received from fetch post:", err));
 
-    //force to redirect
-    history("dashboard");
+    //force to redirect, have to await properly
+    await history("dashboard");
   };
 
   return (
     <div className="my-5">
       <GoogleLogin
-        clientId={
-          process.env.CLIENT_ID
-        }
+        clientId={process.env.CLIENT_ID}
         buttonText="Login with Google"
         onSuccess={onLoginSuccess}
         onFailure={onLoginFailure}

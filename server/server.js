@@ -5,16 +5,15 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const env = require("dotenv").config();
 const PORT = process.env.PORT || 3000;
-const authRouter = require('./routes/authRoutes');
-const postRouter = require('./routes/postRoutes');
-const athleteRouter = require('./routes/athleteRoutes');
-
+const authRouter = require("./routes/authRoutes");
+const postRouter = require("./routes/postRoutes");
+const athleteRouter = require("./routes/athleteRoutes");
+const subcriptionRouter = require("./routes/subcriptionRoutes");
 
 /**
- * enable http request protocol 
+ * enable http request protocol
  */
 app.use(cors());
-
 
 /**
  * handle parsing request body
@@ -23,11 +22,11 @@ app.use(express.json());
 
 app.get("/", (req, res, next) => {
   return res.status(200).send("the server is working");
-})
+});
 
-app.use('/api/auth', authRouter);
-app.use('/api/post', postRouter);
-app.use('/api/athlete', athleteRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
+app.use("/api/athlete", athleteRouter, subcriptionRouter);
 
 //handle page not found
 app.use((req, res) =>
