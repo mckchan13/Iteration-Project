@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { createAthleteName } from "../reducers/athleteSlice";
 
 const AthleteProfile = ({ athleteId, ...rest }) => {
+  const athlete = useSelector((state) => state.athlete.name)
+  const dispatch = useDispatch();
   const [athleteName, setAthleteName] = useState("Awesome Athlete");
   const history = useNavigate();
 
@@ -9,13 +13,13 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
     fetch(`/api/athlete/info?id=${athleteId}`)
       .then((data) => data.json())
       .then(({ athleteName }) => {
-        setAthleteName(athleteName);
+        dispatch(createAthleteName(athleteName))
       });
-  });
+  }, []);
 
   return (
     <React.Fragment>
-      <h3 className="text-3xl text-center pl-5 mx-20">{athleteName} Profile</h3>
+      <h3 className="text-3xl text-center pl-5 mx-20">{athlete} Profile</h3>
       <div className="athlete-card">
         <button
           type="submit"

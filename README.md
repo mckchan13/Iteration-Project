@@ -1,1 +1,2 @@
 # scratch-project
+using the redux to set user info. For example, app is set cookies, then we use cookies to fetch data in different component (ex. athleteprofile). However we can store cookies inside the store so that the whole app has access to it. 

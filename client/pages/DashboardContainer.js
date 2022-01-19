@@ -4,8 +4,12 @@ import Feed from "../components/Feed";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useSelector, useDispatch } from "react-redux";
+import { createAthleteName } from "../reducers/athleteSlice";
 
 const DashboardContainer = (props) => {
+  const athlete = useSelector((state) => state.athlete.name);
+  const dispatch = useDispatch();
   const [workoutsList, setWorkoutsList] = useState([]);
   const history = useNavigate();
   const athleteId = Cookies.get("athleteId");
@@ -21,6 +25,14 @@ const DashboardContainer = (props) => {
     );
   };
 
+  useEffect(() => {
+    fetch(`/api/athlete/info?id=${athleteId}`)
+      .then((data) => data.json())
+      .then(({ athleteName }) => {
+        dispatch(createAthleteName(athleteName))
+      });
+  }, []);
+
   // on mount fetch workout-list from server
   useEffect(() => {
     getWorkOutsList();
@@ -31,7 +43,7 @@ const DashboardContainer = (props) => {
       <Header />
       <div id="dashboard-container">
         <div className="flex my-5">
-          <h3 className="text-3xl text-center pl-5 mx-20">Dashboard</h3>
+          <h3 className="text-3xl text-center pl-5 mx-20">{athlete}'s Dashboard</h3>
           <button
             type="submit"
             onClick={() => history(`../athletepage/${athleteId}`)}
