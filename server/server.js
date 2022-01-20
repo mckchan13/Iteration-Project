@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 const authRouter = require("./routes/authRoutes");

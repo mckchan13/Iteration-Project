@@ -8,14 +8,14 @@ const Header = () => {
       <h1 className="text-2xl font-bold">fithaus</h1>
       <Search />
       <ul className="flex ">
-        <li className="pr-2 hover:text-blue100">
-          <a href="#">About</a>
+        <li className="pr-3 hover:text-blue100">
+          <Link to="/about">About</Link>
         </li>
-        <li className="pr-2 hover:text-blue100">
-          <a href="#">Chat</a>
+        <li className="pr-3 hover:text-blue100">
+          <Link to="/chat">Chat</Link>
         </li>
         <li className="hover:text-blue100">
-          <a href="#">Signout</a>
+          <Link to="/">Signout</Link>
         </li>
       </ul>
     </div>
