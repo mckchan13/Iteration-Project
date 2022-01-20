@@ -9,8 +9,8 @@ const socketUtil = {
       elem.socketId !== socketId;
     });
   },
-  getUser(recieverId) {
-    return this.users.find((user) => user.userId === recieverId);
+  getUser(receiverId) {
+    return this.users.find((user) => user.userId === receiverId);
   },
 };
 

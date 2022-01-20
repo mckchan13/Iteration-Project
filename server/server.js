@@ -10,6 +10,8 @@ const postRouter = require("./routes/postRoutes");
 const athleteRouter = require("./routes/athleteRoutes");
 const searchRouter = require("./routes/searchRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoutes");
+const conversationRouter = require("./routes/conversationRoutes");
+const messageRouter = require("./routes/messageRoutes");
 const cookieParser = require("cookie-parser");
 const socketUtil = require("./util/socketUtil.js");
 
@@ -35,6 +37,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/athlete", athleteRouter, subscriptionRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/conversation", conversationRouter);
+app.use("/api/message", messageRouter);
 
 //socket.io setup
 io.on("connection", (socket) => {
@@ -48,9 +52,9 @@ io.on("connection", (socket) => {
   });
 
   //send and get messages
-  socket.on("sendMessage", ({ senderId, recieverId, text }) => {
-    const reciever = getUser(recieverId);
-    io.to(reciever.socketId).emit("getMessage", { senderId, text });
+  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    const receiver = getUser(receiverId);
+    io.to(receiver.socketId).emit("getMessage", { senderId, text });
   });
 
   //when disconnect

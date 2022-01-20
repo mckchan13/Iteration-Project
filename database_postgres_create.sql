@@ -32,3 +32,21 @@ CREATE TABLE IF NOT EXISTS tag (
     "athlete_id" serial REfERENCES athletes("_id") NOT NULL,
     CONSTRAINT "tag_id_pk" PRIMARY KEY ("_id")
 );
+
+CREATE TABLE IF NOT EXISTS conversation (
+    "_id" serial NOT NULL,
+    "sender_id" serial REfERENCES athletes("_id") NOT NULL,
+    "receiver_id" serial REfERENCES athletes("_id") NOT NULL,
+    "date" timestamp,
+    CONSTRAINT "conversation_id_pk" PRIMARY KEY ("_id")
+);
+
+
+CREATE TABLE IF NOT EXISTS message (
+    "_id" serial NOT NULL,
+    "message" varchar NOT NULL,
+    "conversation_id" serial REFERENCES conversation("_id") NOT NULL,
+    "sender_id" serial REfERENCES athletes("_id") NOT NULL,
+    "date" timestamp,
+    CONSTRAINT "message_id_pk" PRIMARY KEY ("_id")
+);
