@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/message.css";
-// import format from 'timeago.js'
+import format from 'timeago'
 
 const Message = ({message, own}) => {
   return (
