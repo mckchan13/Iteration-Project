@@ -28,15 +28,15 @@ const messageController = {
   },
 
   getMessage: async (req, res, next) => {
-    const { userId } = req.query;
+    const { conversationId } = req.query;
 
     try {
       const query = `SELECT *
         FROM message
-        WHERE sender_id = ${userId}`;
+        WHERE conversation_id = ${conversationId}`;
 
       const message = await pool.query(query);
-      res.locals.message = message.rows[0];
+      res.locals.message = message.rows;
       return next();
     } catch (error) {
       return next({

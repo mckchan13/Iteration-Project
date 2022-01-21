@@ -36,7 +36,8 @@ const conversationController = {
         WHERE sender_id = ${userId}`;
 
       const conv = await pool.query(query);
-      res.locals.conversation = conv.rows[0];
+      console.log(conv.rows)
+      res.locals.conversation = conv.rows;
       return next();
     } catch (error) {
       return next({
