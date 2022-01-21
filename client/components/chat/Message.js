@@ -1,10 +1,10 @@
 import React from "react";
 import "../../styles/message.css";
-import { format } from 'timeago.js'
+import { format } from "timeago.js";
 
-const Message = ({message, own}) => {
+const Message = ({ messages, message, own }) => {
   return (
-    <div className={own ? "message own" : 'message'}>
+    <div className={own ? "message own" : "message"}>
       <div className="messageTop">
         <img
           className="messageImg"

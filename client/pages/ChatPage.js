@@ -7,33 +7,63 @@ import "../styles/chatPage.css";
 import Conversations from "../components/chat/Conversations";
 import Message from "../components/chat/Message";
 import ChatOnline from "../components/chat/ChatOnline";
+import { format } from "timeago.js";
 
 const ChatPage = () => {
   const [user, setUser] = useState(Cookies.get("athleteId"));
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const scroll = useRef();
   const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:3000");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        message: data.message,
+        conversation_Id: currentChat._id,
+        sender_Id: data.senderId,
+        date: format(Date.now()),
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat.sender_id == arrivalMessage.senderId &&
+      setMessages([...messages, arrivalMessage]);
+  }, [arrivalMessage]);
+
+  useEffect(() => {
+    socket.current.emit("addUser", user);
+    socket.current.on("getUsers", (users) => {
+      console.log(users);
+    });
+  }, [user]);
 
   useEffect(() => {
     const getConvo = async () => {
       try {
         const res = await axios.get(`/api/conversation?userId=${user}`);
-        setConversations(res.data)
+        setConversations(res.data);
         // console.log(res.data);
       } catch (error) {
         console.log("getConvo error:", error);
       }
     };
-    getConvo()
+    getConvo();
   }, [user]);
 
   useEffect(() => {
-    const getMessages= async () => {
+    const getMessages = async () => {
       try {
-        const res = await axios.get(`/api/message?conversationId=${currentChat._id}`);
+        const res = await axios.get(
+          `/api/message?conversationId=${currentChat._id}`
+        );
         setMessages(res.data);
-        console.log(res.data);
       } catch (error) {
         console.log("getMessages error:", error);
       }
@@ -42,15 +72,37 @@ const ChatPage = () => {
   }, [currentChat]);
 
   useEffect(() => {
-    socket.current = io("ws://localhost:3000");
-  }, []);
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-  useEffect(() => {
-    socket.current.emit("addUser", user);
-    socket.current.on("getUsers", (users) => {
-      console.log(users);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!newMessage) {
+      return console.log("Enter New Message");
+    }
+
+    socket.current.emit("sendMessage", {
+      senderId: user,
+      receiverId: currentChat.receiver_id,
+      message: newMessage,
     });
-  }, [user]);
+
+    try {
+      const mess = {
+        message: newMessage,
+        conversationId: currentChat._id,
+        senderId: user,
+      };
+
+      const res = await axios.post("/api/message", mess);
+      console.log(res);
+      setMessages([...messages, res.data]);
+      setNewMessage("");
+    } catch (error) {
+      console.log("handleSubmit error:", error);
+    }
+  };
 
   return (
     <div>
@@ -64,11 +116,7 @@ const ChatPage = () => {
             ></input>
             {conversations.map((convo) => (
               <div onClick={() => setCurrentChat(convo)}>
-                <Conversations
-                  key={convo._id}
-                  conversation={convo}
-                  currUser={user}
-                />
+                <Conversations key={convo._id} conversation={convo} />
               </div>
             ))}
           </div>
@@ -78,16 +126,27 @@ const ChatPage = () => {
             {currentChat ? (
               <>
                 <div className="chatBoxTop">
-                  {messages.map((message) => (
-                    <Message key={ message._id} message={message} own={message.sender_id===user}/>
+                  {messages.map((m) => (
+                    <div ref={scroll}>
+                      <Message
+                        key={m._id}
+                        messages={messages}
+                        message={m}
+                        own={m.sender_id == user}
+                      />
+                    </div>
                   ))}
                 </div>
                 <div className="chatBoxBottom">
                   <textarea
-                    placeholder="Enter Message"
+                    placeholder="Enter Message..."
                     className="chatMessageInput"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
                   ></textarea>
-                  <button className="chatSubmitButton">Send</button>
+                  <button className="chatSubmitButton" onClick={handleSubmit}>
+                    Send
+                  </button>
                 </div>
               </>
             ) : (

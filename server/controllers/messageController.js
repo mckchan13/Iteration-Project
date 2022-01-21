@@ -13,11 +13,13 @@ const messageController = {
       const query = `
       INSERT INTO message (message, conversation_id, sender_id, date)
       VALUES ($1, $2, $3, $4)
-      RETURNING _id
+      RETURNING *
     `;
 
       const message = await pool.query(query, params);
+
       res.locals.message = message.rows[0];
+
       return next();
     } catch (error) {
       return next({
