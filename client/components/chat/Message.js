@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/message.css";
-import format from 'timeago'
+import { format } from 'timeago.js'
 
 const Message = ({message, own}) => {
   return (
@@ -13,7 +13,7 @@ const Message = ({message, own}) => {
         />
         <p className="messageText">{message.message}</p>
       </div>
-      <div className="messageBottom">{message.date}</div>
+      <div className="messageBottom">{format(message.date)}</div>
     </div>
   );
 };

@@ -7,12 +7,12 @@ const pool = new Pool(databaseConfig);
 const messageController = {
   addMessage: async (req, res, next) => {
     const { message, conversationId, senderId } = req.body;
-    const params = [message, conversationId, senderId];
+    const params = [message, conversationId, senderId, Date.now()];
 
     try {
       const query = `
-      INSERT INTO message (message, conversation_id, sender_id)
-      VALUES ($1, $2, $3)
+      INSERT INTO message (message, conversation_id, sender_id, date)
+      VALUES ($1, $2, $3, $4)
       RETURNING _id
     `;
 

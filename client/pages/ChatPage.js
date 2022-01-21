@@ -79,7 +79,7 @@ const ChatPage = () => {
               <>
                 <div className="chatBoxTop">
                   {messages.map((message) => (
-                    <Message message={message} own={message.sender_id===user}/>
+                    <Message key={ message._id} message={message} own={message.sender_id===user}/>
                   ))}
                 </div>
                 <div className="chatBoxBottom">
