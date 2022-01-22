@@ -19,6 +19,11 @@ Router.post("/workout/like", queriesRouter.likeWorkout, (req, res) => {
   return res.status(200).json({ likedPost });
 });
 
+Router.delete("/workout/unlike", queriesRouter.unlikeWorkout, (req, res) => {
+  const { likedPost } = res.locals
+  return res.status(200).json({ likedPost });
+});
+
 Router.get("/workout/:post", queriesRouter.getWorkout, (req, res) => {
   return res.status(200).json(res.locals.post);
 });

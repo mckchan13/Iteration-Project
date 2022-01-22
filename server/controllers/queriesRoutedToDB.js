@@ -22,11 +22,11 @@ const queriesRouter = {
 
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsList: (req, res, next) => {
-    const query = `SELECT a.athlete_name, w.* 
-    FROM workout_card w
-    JOIN athletes a
-      ON w.athlete_id = a._id
-    ORDER BY date DESC;`
+    // const query = `SELECT a.athlete_name, w.* 
+    // FROM workout_card w
+    // JOIN athletes a
+    //   ON w.athlete_id = a._id
+    // ORDER BY date DESC;`
     const newQuery = `SELECT a.athlete_name, w.*, l.likedby FROM workout_card w JOIN athletes a ON w.athlete_id = a._id FULL OUTER JOIN likes l ON w._id=l.workout_id ORDER BY date DESC`
 
     pool
@@ -72,6 +72,22 @@ const queriesRouter = {
     try {
       const likedPost = await pool.query(likeQuery, [ workout_id, athlete_id ])
       res.locals.likedPost = likedPost
+      return next();
+    } catch (error) {
+      return next({
+        log: "error liking workout to like table in database",
+        message: { err: `error received from likeWorkout query: ${error}` },
+      });
+    }
+  },
+  
+  unlikeWorkout: async (req, res, next) => {
+    try {
+      const { workout_id, athlete_id } = req.body;
+      const unlikeQuery = `DELETE FROM likes WHERE workout_id=$1 AND likedby=$2;`
+      const unlikedPost = await pool.query(unlikeQuery, [ workout_id, athlete_id ])
+      console.log('unlikedPost', unlikedPost)
+      res.locals.unlikedPost = unlikedPost;
       return next();
     } catch (error) {
       return next({
@@ -143,18 +159,13 @@ const queriesRouter = {
     console.log(athleteId);
 
     if (athleteId === undefined) return next({ log: "no athlete_id found" });
-
+    const oldQuery = `SELECT a.athlete_name, w.* FROM workout_card w JOIN athletes a ON w.athlete_id = a._id WHERE a._id = ${athleteId}
+    ORDER BY date DESC;`
+    const newQuery = `SELECT a.athlete_name, w.*, l.likedby FROM workout_card w JOIN athletes a ON w.athlete_id = a._id FULL OUTER JOIN likes l ON w._id=l.workout_id WHERE w.athlete_id = $1 ORDER BY date DESC;`
     pool
-      .query(
-        `SELECT a.athlete_name, w.* 
-              FROM workout_card w
-              JOIN athletes a
-                ON w.athlete_id = a._id
-                WHERE a._id = ${athleteId}
-              ORDER BY date DESC;`
-      )
+      .query( newQuery, [ athleteId ] )
       .then((workoutsListData) => {
-        // console.log(workoutsListData);
+        console.log('in getWorkoutsByAthlete', workoutsListData);
         if (!workoutsListData.rows[0])
           return next({ log: "no workouts found for this athlete" });
         res.locals.workoutsList = workoutsListData.rows;

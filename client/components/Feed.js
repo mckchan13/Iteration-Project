@@ -3,7 +3,7 @@ import WorkoutCard from "./WorkoutCard";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Feed = ({ workoutsList }) => {
+const Feed = ({ workoutsList, getWorkOutsList }) => {
   // populate array with workout card components
   const athleteId = Cookies.get("athleteId");
   const workoutCards = [];
@@ -22,6 +22,7 @@ const Feed = ({ workoutsList }) => {
         // comments={workout["comments"]} TO DO: Add likes to the database
         cardId={workout["_id"]}
         key={workout["_id"]}
+        getWorkOutsList={getWorkOutsList}
         history={history}
       ></WorkoutCard>
     );

@@ -15,7 +15,6 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
     fetch(`/api/athlete/info?id=${athleteId}`)
       .then((data) => data.json())
       .then(({ athleteName }) => {
-        console.log(athleteName);
         setAthleteName(athleteName);
       });
   });

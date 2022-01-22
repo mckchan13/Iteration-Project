@@ -1,28 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import { blue } from '@mui/material/colors';
+import IconButton from '@mui/material/IconButton';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 
-const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId, athleteName, athleteId, picture, likedby, hasLiked, comments, }) => {
+const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId, athleteName, athleteId, picture, likedby, comments, getWorkOutsList }) => {
   const currentUser = athleteId
-  console.log(likedby)
+  const numLikes = Object.keys(likedby).length
   const [liked, setLiked] = useState(likedby[athleteId] ? true : false);
 
   const handleLike = async (e) => {
     e.preventDefault();
-    // console.log("You have clicked the submit button.");
-    //writing to the database
     const headers = {
       headers: { "Content-Type": "application/json" },
     };
-
-    const result = await axios.post(
-      "/api/post/workout/like",
-      { workout_id : cardId, athlete_id : currentUser },
-      headers
-    );
-    setLiked(true)
-    //reset the content of text field after post
-
+    if (!liked) {
+      const result = await axios.post(
+        "/api/post/workout/like",
+        { workout_id : cardId, athlete_id : currentUser },
+        headers
+      );
+      setLiked(true)
+    } else {
+      const result = await axios({
+        method: 'delete',
+        url: '/api/post/workout/unlike',
+        data: {
+          workout_id : cardId,
+          athlete_id : currentUser,
+        }
+      });
+      setLiked(false);
+    }
   }
 
   const LikeButton = () => {
@@ -49,6 +60,10 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
     return date.split("T")[0]
   }
 
+  useEffect(()=> {
+    getWorkOutsList();
+  },[liked])
+
   return (
     <div className=" bg-center max-w-xl px-4 py-4 bg-white shadow-md rounded-lg hover:bg-gray-100">
       <div className="bg-blue100 shadow-md rounded-lg hover:bg-gray-100 py-5 px-2">
@@ -65,6 +80,10 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
         </Link>
       </div>
       <div>Date: {roundDate(date)}</div>
+      <div>Number of Likes: {numLikes}</div>
+      <IconButton onClick={handleLike}>
+      {liked ? <ThumbDownIcon sx={{ color: blue[500] }}/> : <ThumbUpIcon sx={{ color: blue[500] }}/> }
+      </IconButton>
       <LikeButton/><br></br>
       {/* <button type="submit" 
       onClick={handleLike}

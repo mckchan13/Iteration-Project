@@ -4,6 +4,7 @@ import AthleteProfile from "../components/AthleteProfile";
 import Header from "../components/Header";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
+import workoutParser from "../utils/workoutParser";
 
 const AthletePage = ({ athleteId }) => {
   const [workoutsList, setWorkoutsList] = useState([]);
@@ -19,10 +20,9 @@ const AthletePage = ({ athleteId }) => {
     return (
       fetch(`/api/athlete/workouts?id=${athleteId}`)
         .then((res) => res.json())
-        // set state
-        .then((data) => {
-          console.log('this is the fetched data', data.workoutsList);
-          setWorkoutsList(data.workoutsList)
+        .then(({workoutsList}) => {
+          // workoutParser helper function needed to parse SQL data in desired format
+          setWorkoutsList(workoutParser(workoutsList)) 
         })
     );
   };
@@ -42,7 +42,7 @@ const AthletePage = ({ athleteId }) => {
         <div className="bg-neutral grid grid-cols-2 gap-2 my-5 px-4 md:px-6 lg:px-8">
           <AthleteProfile athleteId={athleteId} />
         </div>
-        <Feed workoutsList={workoutsList} />
+        <Feed workoutsList={workoutsList} getWorkOutsList={getWorkOutsList}/>
       </div>
     </React.Fragment>
   );

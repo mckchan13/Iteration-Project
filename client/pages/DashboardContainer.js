@@ -3,6 +3,7 @@ import PostWorkoutContainer from "../components/PostWorkoutContainer";
 import Feed from "../components/Feed";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import workoutParser from "../utils/workoutParser";
 import Cookies from "js-cookie";
 
 const DashboardContainer = (props) => {
@@ -12,36 +13,12 @@ const DashboardContainer = (props) => {
   
   //handle post function takes in nothing
   const getWorkOutsList = () => {
-    // console.log("getworkoutlist function is being invoked");
     return (
       fetch("/api/post/workoutslist")
         .then((res) => res.json())
         // set state
         .then(({workoutsList}) => {
-          console.log(workoutsList)
-          const workoutIdCache = {};
-          const parsedWorkoutsList = [];
-          for (let i = 0; i < workoutsList.length; i++) {
-            if (!workoutIdCache[workoutsList[i]._id]) {
-              workoutIdCache[workoutsList[i]._id] = parsedWorkoutsList.length;
-              const { likedby } = workoutsList[i]
-              const newWorkoutCard = {...workoutsList[i], likedby: {}}
-              if (!likedby) {
-                parsedWorkoutsList.push(newWorkoutCard);
-                continue;
-              }
-              newWorkoutCard.likedby[likedby] = true;
-              parsedWorkoutsList.push(newWorkoutCard);
-            } else {
-              const currIdx = workoutIdCache[workoutsList[i]._id]
-              const { likedby } = workoutsList[i]
-              if (!likedby) {
-                continue;
-              }
-              parsedWorkoutsList[currIdx].likedby[likedby] = true;
-            }
-          }
-          console.log(parsedWorkoutsList)
+          const parsedWorkoutsList = workoutParser(workoutsList);
           return setWorkoutsList(parsedWorkoutsList)
         })
     );
@@ -66,7 +43,7 @@ const DashboardContainer = (props) => {
           </button>
         </div>
         <div className="bg-neutral grid grid-cols-2 gap-2 my-6 px-4 md:px-6 lg:px-8 relative">
-          <Feed workoutsList={workoutsList} />
+          <Feed workoutsList={workoutsList} getWorkOutsList={getWorkOutsList}/>
           <PostWorkoutContainer
             id="styling-PostWorkoutCentainer"
             className="box-content"
