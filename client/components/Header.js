@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div className="flex justify-between items-center px-11 py-4 bg-primary text-white">
-      <h1 className="text-2xl font-bold">fithaus</h1>
+      <h1 className="text-2xl font-bold">
+        <Link to="/dashboard">fithaus</Link>
+      </h1>
       <Search />
       <ul className="flex ">
         <li className="pr-3 hover:text-blue100">

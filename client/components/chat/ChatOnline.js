@@ -1,25 +1,39 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "../../styles/online.css";
 
 const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat }) => {
   const [friends, setFriends] = useState([]);
+  const [friendsId, setFriendsId] = useState([]);
   const [onlineFriends, setOnlineFriends] = useState([]);
 
   useEffect(() => {
     // api call to get all people youre following
-    //set them as friends
+    const getFriends = async () => {
+      const res = await axios.get(`/api/athlete/currentFollowed?userId=${currUserId}`)
+      console.log(res.data)
+      setFriends(res.data.followed)
+      setFriendsId(res.data.following_id)
+    }
+    getFriends()
   }, [onlineUsers]);
 
   useEffect(() => {
-    // loop through online users and see if id matches friends
-    //set them as onlinefriends
-  }, [onlineUsers]);
+    setOnlineFriends(friends.filter((f)=>{friendsId.includes(f._id)}))
+  }, [friendsId, friends, onlineUsers]);
+
+  const handleClick = async (user) => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
   
   return (
     <div className="chatOnline">
-      {onlineMinusCurrUser &&
-        onlineMinusCurrUser.map((user) => (
-          <div className="chatOnlineFriend">
+      {onlineFriends.map((online) => (
+          <div className="chatOnlineFriend" onClick={handleClick}>
             <div className="chatOnlineImgContainer">
               <img
                 className="chatOnlineImg"
@@ -28,7 +42,7 @@ const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat }) => {
               />
               <div className="chatOnlineBadge"></div>
             </div>
-            <span className="chatOnlineName">John Doe</span>
+          <span className="chatOnlineName">{ online.athlete_name }</span>
           </div>
         ))}
     </div>
