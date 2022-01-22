@@ -22,14 +22,15 @@ const queriesRouter = {
 
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsList: (req, res, next) => {
+    const query = `SELECT a.athlete_name, w.* 
+    FROM workout_card w
+    JOIN athletes a
+      ON w.athlete_id = a._id
+    ORDER BY date DESC;`
+    const newQuery = `SELECT a.athlete_name, w.*, l.likedby FROM workout_card w JOIN athletes a ON w.athlete_id = a._id FULL OUTER JOIN likes l ON w._id=l.workout_id ORDER BY date DESC`
+
     pool
-      .query(
-        `SELECT a.athlete_name, w.* 
-              FROM workout_card w
-              JOIN athletes a
-                ON w.athlete_id = a._id
-              ORDER BY date DESC;`
-      )
+      .query( newQuery )
       .then((workoutsListData) => {
         if (!workoutsListData) return next({ log: "no workouts found" });
         res.locals.workoutsList = workoutsListData.rows;
@@ -51,6 +52,7 @@ const queriesRouter = {
     // console.log(athlete_id, workout_content, workout_title);
 
     try {
+      // const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}') RETURNING _id; `;
       const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id, vector) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}', to_tsvector('${workout_content}')) RETURNING _id; `;
 
       const post = await pool.query(query);
@@ -60,6 +62,21 @@ const queriesRouter = {
       return next({
         log: "error posting workout to workout_card table in database",
         message: { err: `error received from postWorkout query: ${error}` },
+      });
+    }
+  },
+
+  likeWorkout: async (req, res, next) => {
+    const { workout_id, athlete_id } = req.body
+    const likeQuery = `INSERT INTO likes (workout_id, likedby) VALUES ($1, $2);`;
+    try {
+      const likedPost = await pool.query(likeQuery, [ workout_id, athlete_id ])
+      res.locals.likedPost = likedPost
+      return next();
+    } catch (error) {
+      return next({
+        log: "error liking workout to like table in database",
+        message: { err: `error received from likeWorkout query: ${error}` },
       });
     }
   },

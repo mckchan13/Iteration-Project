@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Cookies from "js-cookie";
 import ChipInput from "material-ui-chip-input";
 import axios from "axios";
@@ -7,8 +7,9 @@ const PostWorkoutContainer = ({ getWorkOutsList }) => {
   const [body, setBody] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
+  const selectedFile = useRef();
+  const [previewPic, setPreviewPic] = useState(null);
   const [athleteId, setAthleteId] = useState(Cookies.get("athleteId"));
-
   const onBodyChange = (e) => setBody(e.target.value);
   const onTitleChange = (e) => setTitle(e.target.value);
 
@@ -56,6 +57,20 @@ const PostWorkoutContainer = ({ getWorkOutsList }) => {
     setTags(tags.filter((tag) => tag !== chipToDelete));
   };
 
+  const previewFile = (e) => {
+    // e.preventDefault()
+    let base64;
+    let reader = new FileReader();
+    // console.log(e.target.files[0])
+    reader.readAsDataURL(e.target.files[0])
+    reader.onload = function () {
+      console.log(reader.result)
+      base64 = reader.result
+    }
+    console.log('this base64', base64);
+    setPreviewPic(base64)
+  }
+
   const clearPost = () => {
     setBody("");
     setTitle("");
@@ -96,6 +111,15 @@ const PostWorkoutContainer = ({ getWorkOutsList }) => {
           onAdd={(chip) => handleAddChip(chip)}
           onDelete={(chip) => handleDeleteChip(chip)}
         />
+        Select a picture:
+        <br></br>
+        <input 
+            type="file"
+            ref={selectedFile}
+            onChange={(e) => previewFile(e)}
+        />
+        <img src={previewPic} />
+        <br></br>
         <br></br>
         <div id="button-styling" className="grid grid-cols-2 content-center">
           <button

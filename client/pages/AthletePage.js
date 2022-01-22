@@ -20,7 +20,10 @@ const AthletePage = ({ athleteId }) => {
       fetch(`/api/athlete/workouts?id=${athleteId}`)
         .then((res) => res.json())
         // set state
-        .then((data) => setWorkoutsList(data.workoutsList))
+        .then((data) => {
+          console.log('this is the fetched data', data.workoutsList);
+          setWorkoutsList(data.workoutsList)
+        })
     );
   };
 

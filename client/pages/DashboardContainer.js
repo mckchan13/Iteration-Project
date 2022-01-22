@@ -17,7 +17,33 @@ const DashboardContainer = (props) => {
       fetch("/api/post/workoutslist")
         .then((res) => res.json())
         // set state
-        .then((data) => setWorkoutsList(data.workoutsList))
+        .then(({workoutsList}) => {
+          console.log(workoutsList)
+          const workoutIdCache = {};
+          const parsedWorkoutsList = [];
+          for (let i = 0; i < workoutsList.length; i++) {
+            if (!workoutIdCache[workoutsList[i]._id]) {
+              workoutIdCache[workoutsList[i]._id] = parsedWorkoutsList.length;
+              const { likedby } = workoutsList[i]
+              const newWorkoutCard = {...workoutsList[i], likedby: {}}
+              if (!likedby) {
+                parsedWorkoutsList.push(newWorkoutCard);
+                continue;
+              }
+              newWorkoutCard.likedby[likedby] = true;
+              parsedWorkoutsList.push(newWorkoutCard);
+            } else {
+              const currIdx = workoutIdCache[workoutsList[i]._id]
+              const { likedby } = workoutsList[i]
+              if (!likedby) {
+                continue;
+              }
+              parsedWorkoutsList[currIdx].likedby[likedby] = true;
+            }
+          }
+          console.log(parsedWorkoutsList)
+          return setWorkoutsList(parsedWorkoutsList)
+        })
     );
   };
   // on mount fetch workout-list from server
