@@ -18,11 +18,9 @@ const DashboardContainer = (props) => {
       fetch('/api/post/workoutslist')
         .then((res) => res.json())
         // set state
-        .then((data) => setWorkoutsList(data.workoutsList))
-        .then(console.log('this is WHlist', workoutsList))
+        .then((data) => setWorkoutsList(data.list))
     );
   };
-
   // on mount fetch workout-list from server
   useEffect(() => {
     getWorkOutsList();
@@ -42,7 +40,10 @@ const DashboardContainer = (props) => {
             My Athlete Profile
           </button>
         </div>
-        <div className="bg-neutral grid grid-cols-2 gap-2 my-6 px-4 md:px-6 lg:px-8 relative">
+        <div
+          id="main"
+          className="bg-neutral grid grid-cols-2 gap-2 my-6 px-4 md:px-6 lg:px-8 relative"
+        >
           <Feed workoutsList={workoutsList} />
           <PostWorkoutContainer
             id="styling-PostWorkoutCentainer"

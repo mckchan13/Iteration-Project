@@ -42,7 +42,6 @@ const PostWorkoutContainer = ({ getWorkOutsList }) => {
       });
     }
     //reset the content of text field after post
-
     getWorkOutsList()
     setBody("");
     setTitle("");

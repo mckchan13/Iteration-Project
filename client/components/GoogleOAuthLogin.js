@@ -27,20 +27,16 @@ export default function GoogleOAuthButton() {
       //after cookie with userId is received in response, gets the cookie on the front-end
       //and sets the state with it
       .then(() => {
+        history("dashboard");
         console.log("OAuth verification successful");
       })
       .catch((err) => console.log("error received from fetch post:", err));
-
-    //force to redirect
-    history("dashboard");
   };
 
   return (
     <div className="my-5">
       <GoogleLogin
-        clientId={
-          process.env.CLIENT_ID
-        }
+        clientId={process.env.CLIENT_ID}
         buttonText="Login with Google"
         onSuccess={onLoginSuccess}
         onFailure={onLoginFailure}

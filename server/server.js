@@ -12,11 +12,22 @@ const passport = require('passport');
 const Dotenv = require('dotenv-webpack');
 const session = require('express-session');
 require('./config/passport')(passport);
-
+const http = require("http");
+const io = require("socket.io");
+require("dotenv").config();
+const searchRouter = require("./routes/searchRoutes");
+const subscriptionRouter = require("./routes/subscriptionRoutes");
+const cookieParser = require("cookie-parser");
 
 /**
  * enable http request protocol
  */
+app.use(cookieParser());
+
+/**
+ * enable http request protocol
+ */
+
 app.use(cors());
 
 /**
@@ -39,9 +50,10 @@ app.get('/', (req, res, next) => {
   return res.status(200).send('the server is working');
 });
 
-app.use('/api/auth', authRouter);
-app.use('/api/post', postRouter);
-app.use('/api/athlete', athleteRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
+app.use("/api/athlete", athleteRouter, subscriptionRouter);
+app.use("/api/search", searchRouter);
 
 //handle page not found
 app.use((req, res) =>
