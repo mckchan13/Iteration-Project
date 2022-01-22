@@ -10,4 +10,8 @@ Router.get("/", conversationController.getConversation, (req, res) => {
   res.status(200).json(res.locals.conversation);
 });
 
+Router.get("/getOne", conversationController.getOneConversation, (req, res) => {
+  res.status(200).json(res.locals.conversation);
+});
+
 module.exports = Router;

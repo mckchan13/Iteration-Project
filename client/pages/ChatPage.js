@@ -24,9 +24,10 @@ const ChatPage = () => {
   useEffect(() => {
     socket.current = io("ws://localhost:3000");
     socket.current.on("getMessage", (data) => {
+      console.log(data)
       setArrivalMessage({
         message: data.message,
-        conversation_Id: currentChat._id,
+        conversation_Id: data.conversationId,
         sender_Id: data.senderId,
         date: format(Date.now()),
       });
@@ -35,15 +36,17 @@ const ChatPage = () => {
 
   useEffect(() => {
     //TODO: comeback here to check
-    arrivalMessage &&
-      currentChat.receiver_id == arrivalMessage.senderId &&
-      setMessages((prev)=>[...prev, arrivalMessage]);
+    if (arrivalMessage !== null) {
+      if (currentChat._id == arrivalMessage.conversationId) {
+        setMessages([...messages, arrivalMessage]);
+      }
+    }
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
     socket.current.emit("addUser", user);
     socket.current.on("getUsers", (users) => {
-      console.log(users)
+      console.log('online:', users)
       setOnlineUsers(users);
     });
   }, [user, arrivalMessage]);
@@ -53,7 +56,7 @@ const ChatPage = () => {
       try {
         const res = await axios.get(`/api/conversation?userId=${user}`);
         setConversations(res.data);
-        // console.log(res.data);
+        
       } catch (error) {
         console.log("getConvo error:", error);
       }
@@ -90,6 +93,7 @@ const ChatPage = () => {
       senderId: user,
       receiverId: currentChat.receiver_id,
       message: newMessage,
+      conversationId: currentChat._id
     });
 
     try {
@@ -161,7 +165,7 @@ const ChatPage = () => {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            <ChatOnline onlineUsers={onlineUsers} currUserId={user} setCurrentChat={setCurrentChat}/>
+            <ChatOnline setConversations={setConversations} onlineUsers={onlineUsers} currUserId={user} setCurrentChat={setCurrentChat}/>
           </div>
         </div>
       </div>

@@ -45,7 +45,7 @@ const subscriptionRouter = {
       console.log("insert query to subscription table...");
       const query = `INSERT INTO subscription (athlete_id, following) VALUES ('${currentUserId}', '${currentAthletePageId}') RETURNING _id;`;
       const insert = await pool.query(query);
-      console.log(insert);
+      
       return next();
     } catch (error) {
       return next({

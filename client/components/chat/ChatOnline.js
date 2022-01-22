@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "../../styles/online.css";
 
-const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat }) => {
+const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat, setConversations}) => {
   const [friends, setFriends] = useState([]);
   const [friendsId, setFriendsId] = useState([]);
   const [onlineFriends, setOnlineFriends] = useState([]);
@@ -29,16 +29,33 @@ const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat }) => {
   
   const handleClick = async (user) => {
     try {
-      
+      const res = await axios.get(`/api/conversation/getOne?user1Id=${user}&user2Id=${currUserId}`);
+
+      if (res.data.length > 0) {
+        return setCurrentChat(res.data[0])
+      }
+
+      else {
+        const payload = {
+          senderId: currUserId,
+          receiverId: user
+        }
+        const add = await axios.post(`/api/conversation`, payload );
+        //need to setCurrentChat
+        setCurrentChat(add.data)
+      }
+
     } catch (error) {
-      
+      console.log(error)
     }
   }
+
+  console.log(onlineFriends)
   
   return (
     <div className="chatOnline">
       {onlineFriends && onlineFriends.map((online) => (
-          <div className="chatOnlineFriend" onClick={handleClick}>
+          <div className="chatOnlineFriend" onClick={()=>handleClick(online._id)}>
             <div className="chatOnlineImgContainer">
               <img
                 className="chatOnlineImg"

@@ -13,7 +13,7 @@ const conversationController = {
       const query = `
       INSERT INTO conversation (sender_id, receiver_id)
       VALUES ($1, $2)
-      RETURNING _id
+      RETURNING *
     `;
 
       const conv = await pool.query(query, params);
@@ -33,11 +33,39 @@ const conversationController = {
     try {
       const query = `SELECT *
         FROM conversation
-        WHERE sender_id = ${userId}`;
+        WHERE sender_id = ${userId} OR receiver_id = ${userId}`;
 
       const conv = await pool.query(query);
-      console.log(conv.rows)
+
       res.locals.conversation = conv.rows;
+      return next();
+    } catch (error) {
+      return next({
+        log: "error fetching conversation from conversation table in database",
+        message: { err: `error received from getConversation query: ${error}` },
+      });
+    }
+  },
+
+  getOneConversation: async (req, res, next) => {
+    const { user1Id, user2Id } = req.query;
+
+    try {
+      const query1 = `SELECT *
+        FROM conversation
+        WHERE sender_id = ${user1Id} AND receiver_id=${user2Id}`;
+      
+      const query2 = `SELECT *
+        FROM conversation
+        WHERE sender_id = ${user2Id} AND receiver_id=${user1Id}`;
+
+      const conv1 = await pool.query(query1);
+      const conv2 = await pool.query(query2);
+
+      if (conv1.rows.length > 0) {
+        res.locals.conversation = conv1.rows;
+      } else{res.locals.conversation = conv2.rows;}
+
       return next();
     } catch (error) {
       return next({

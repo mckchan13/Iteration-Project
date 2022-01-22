@@ -11,7 +11,7 @@ const socketUtil = {
     });
   },
   getUser(receiverId) {
-    return this.users.find((user) => user.userId === receiverId);
+    return this.users.find((user) => user.userId == receiverId);
   },
 };
 
