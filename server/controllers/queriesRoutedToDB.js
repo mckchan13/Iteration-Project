@@ -22,7 +22,7 @@ const queriesRouter = {
 
   //gets the uique workouts list (for user has subscription already) from the DB as an array of workout objects
   uniqueWorkoutList: async (req, res, next) => {
-    const currentUserId = req.cookies["athleteId"];
+    const currentUserId = req.session.passport.user;
     try {
       const query = `SELECT a.athlete_name, w.* FROM workout_card w INNER JOIN athletes a ON w.athlete_id = a._id INNER JOIN subscription s ON w.athlete_id = s.following WHERE s.athlete_id = ${currentUserId} ORDER BY date DESC;`;
 
@@ -91,6 +91,7 @@ const queriesRouter = {
 
   getWorkout: async (req, res, next) => {
     const { post } = req.params;
+    console.log("1111" + post)
     // console.log(athlete_id, workout_content, workout_title);
 
     try {
@@ -147,11 +148,12 @@ const queriesRouter = {
 
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsByAthlete: (req, res, next) => {
-    const athleteId = req.session.passport.user;
-    console.log(athleteId);
-
-    if (athleteId === undefined) return next({ log: "no athlete_id found" });
-
+    
+    const { athleteId } = req.params;
+    if (athleteId === undefined) 
+      athleteId = req.session.passport.user
+    // return next({ log: "no athlete_id found" });
+    
     pool
       .query(
         `SELECT a.athlete_name, w.* 
@@ -180,8 +182,8 @@ const queriesRouter = {
 
   //gets the athlete info from the DB (just the name to start with)
   getAthleteInfo: (req, res, next) => {
-    const athleteId = req.session.passport.user;
-    console.log('this is getathleteInfo', req.session.passport.user)
+    const { athleteId } = req.params;
+    console.log('this is getathleteInfo', athleteId)
 
     if (athleteId === undefined) return next({ log: "no athlete_id found" });
 

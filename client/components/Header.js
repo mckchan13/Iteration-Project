@@ -31,6 +31,7 @@ const Header = () => {
 
   const logout = (e) => {
     // e.preventDefault();
+    sessionStorage.clear();
     axios({
       method: 'post',
       url: '/api/auth/logout',

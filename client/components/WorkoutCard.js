@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const WorkoutCard = ({ workoutContent, date, cardAthleteId, athleteName }) => {
+  console.log("!!!!! " + cardAthleteId)
   const roundDate = (date) => {
     return date.split("T")[0]
   }
@@ -13,7 +14,7 @@ const WorkoutCard = ({ workoutContent, date, cardAthleteId, athleteName }) => {
       {/* <div>Athlete Name: {athleteName}</div> */}
       <div>
         {athleteName}:{" "}
-        <Link to={`../athletepage/`} className="underline">
+        <Link to={`../athletepage/${cardAthleteId}`} className="underline">
           View Profile
         </Link>
       </div>

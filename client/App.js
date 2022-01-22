@@ -7,6 +7,7 @@ import {
   Link,
   useNavigate,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from 'axios';
@@ -24,14 +25,13 @@ export default function App() {
   const [isAuth, setAuth] = useState(false); 
 
   useEffect(() => {
-    
+    sessionStorage.clear();
     axios({
       method: 'get',
       url: '/api/auth/checkAuth',
       withCredentials: true,
     }).then((response) => {
       setAuth(response.status === 200 ? true : false);
-      sessionStorage.setItem("userId","xx")
       })
       .catch((error) => {
         console.log(error);
@@ -39,7 +39,6 @@ export default function App() {
       });
   }, []);
   
-  console.log(sessionStorage)
   const RequireAuth = ({ Component, ...rest }) => {
     if (isAuth) {
       return <Component {...rest} />;
@@ -63,7 +62,6 @@ export default function App() {
     }
   };
 
-  console.log(sessionStorage.getItem("userId") )
   return (
     <div className="App">
       <Routes>
@@ -80,13 +78,22 @@ export default function App() {
         />
 
         <Route
-          path="/athletepage"
+          path="/athletepage/:athleteId"
           element={
             <RequireAuth Component={AthletePage}>
               {/* <AthletePage /> */}
             </RequireAuth>
           }
         />
+
+        <Route
+          path="/athletepage"
+          element={
+            <RequireAuth Component={AthletePage}>
+              {/* <AthletePage /> */}
+            </RequireAuth>
+          }
+        />  
 
         <Route
           path="workoutPost/:post"
