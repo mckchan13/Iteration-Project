@@ -49,7 +49,7 @@ const queriesRouter = {
 
   postWorkout: async (req, res, next) => {
     const { athlete_id, workout_content, workout_title } = req.body;
-    // console.log(athlete_id, workout_content, workout_title);
+    console.log({...req.body})
 
     try {
       // const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}') RETURNING _id; `;

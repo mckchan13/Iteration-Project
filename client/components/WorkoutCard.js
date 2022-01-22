@@ -22,6 +22,7 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
         { workout_id : cardId, athlete_id : currentUser },
         headers
       );
+      console.log('the current card\'s creator is:', athleteName)
       setLiked(true)
     } else {
       const result = await axios({
@@ -32,6 +33,7 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
           athlete_id : currentUser,
         }
       });
+      console.log('the current card\'s creator is:', athleteName)
       setLiked(false);
     }
   }
@@ -84,7 +86,7 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
       <IconButton onClick={handleLike}>
       {liked ? <ThumbDownIcon sx={{ color: blue[500] }}/> : <ThumbUpIcon sx={{ color: blue[500] }}/> }
       </IconButton>
-      <LikeButton/><br></br>
+      {/* <LikeButton/><br></br> */}
       {/* <button type="submit" 
       onClick={handleLike}
       className="bg-primary text-white font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"

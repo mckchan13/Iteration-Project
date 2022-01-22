@@ -1,6 +1,6 @@
-// Helper function to parse the SQL data
-// Reformats the received data so that the query response is reformatted
-// such that the likedby key is reconfigured to contain all athleteIds that have
+// Helper function to parse the SQL data when fetching workouts list in the dashboard or athletepage
+// Reformats the received data such that the "likedby" key 
+// is reconfigured to have the value of an object with all athleteIds that have
 // liked the card.
 
 function workoutParser(workoutsList) {
