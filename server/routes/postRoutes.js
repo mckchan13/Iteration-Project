@@ -12,7 +12,7 @@ Router.get(
     const { workoutsList, uniqueWorkoutList } = res.locals;
     workoutsList.filter((el) => !uniqueWorkoutList.includes(el));
     const list = [...uniqueWorkoutList, ...workoutsList];
-
+    // workoutsList.unshift(...uniqueWorkoutList); 
     return res.status(200).json({ list });
   }
 );

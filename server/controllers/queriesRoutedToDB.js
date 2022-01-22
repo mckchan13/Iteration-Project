@@ -27,7 +27,7 @@ const queriesRouter = {
       const query = `SELECT a.athlete_name, w.* FROM workout_card w INNER JOIN athletes a ON w.athlete_id = a._id INNER JOIN subscription s ON w.athlete_id = s.following WHERE s.athlete_id = ${currentUserId} ORDER BY date DESC;`;
 
       const unique = await pool.query(query);
-      console.log(unique.rows, "query from unique");
+      // console.log(unique.rows, "query from unique");
       if (unique.rows.length === undefined) return next();
       else {
         res.locals.uniqueWorkoutList = unique.rows;

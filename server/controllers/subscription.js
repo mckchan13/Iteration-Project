@@ -45,7 +45,7 @@ const subscriptionRouter = {
       console.log("insert query to subscription table...");
       const query = `INSERT INTO subscription (athlete_id, following) VALUES ('${currentUserId}', '${currentAthletePageId}') RETURNING _id;`;
       const insert = await pool.query(query);
-      console.log(insert);
+      
       return next();
     } catch (error) {
       return next({
@@ -74,6 +74,32 @@ const subscriptionRouter = {
       });
     }
   },
+
+  getFollowed: async (req, res, next) => {
+    const { userId } = req.query
+    
+    try {
+      const query = `SELECT athletes.athlete_name, athletes._id FROM athletes INNER JOIN subscription ON subscription.following = athletes._id WHERE subscription.athlete_id = ${userId}`
+
+      const query2 = `SELECT athletes._id FROM athletes INNER JOIN subscription ON subscription.following = athletes._id WHERE subscription.athlete_id = ${userId}`;
+
+      const friends = await pool.query(query)
+      const following = await pool.query(query2);
+
+      res.locals.followed = friends.rows
+      let following_id = []
+      following.rows.map(e=>following_id.push(e._id))
+      res.locals.following_id = following_id;
+      return next()
+      
+    } catch (error) {
+      return next({
+        log: "error from getFollowed in subscription table in database",
+        message: { err: `error received from getFollowed query: ${error}` },
+      });
+    }
+
+  }
 };
 
 module.exports = subscriptionRouter;

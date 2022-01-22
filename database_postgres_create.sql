@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS workout_card (
     "workout_content" varchar NOT NULL, 
     "date" timestamp,
     "athlete_id" serial REFERENCES athletes("_id"),
+    "vector" tsvector,
     CONSTRAINT "workout_card_id_pk" PRIMARY KEY ("_id")
 );
 
@@ -31,4 +32,22 @@ CREATE TABLE IF NOT EXISTS tag (
     "workout_id" serial REFERENCES workout_card("_id") NOT NULL,
     "athlete_id" serial REfERENCES athletes("_id") NOT NULL,
     CONSTRAINT "tag_id_pk" PRIMARY KEY ("_id")
+);
+
+CREATE TABLE IF NOT EXISTS conversation (
+    "_id" serial NOT NULL,
+    "sender_id" serial REfERENCES athletes("_id") NOT NULL,
+    "receiver_id" serial REfERENCES athletes("_id") NOT NULL,
+    "date" varchar,
+    CONSTRAINT "conversation_id_pk" PRIMARY KEY ("_id")
+);
+
+
+CREATE TABLE IF NOT EXISTS message (
+    "_id" serial NOT NULL,
+    "message" varchar NOT NULL,
+    "conversation_id" serial REFERENCES conversation("_id") NOT NULL,
+    "sender_id" serial REfERENCES athletes("_id") NOT NULL,
+    "date" varchar,
+    CONSTRAINT "message_id_pk" PRIMARY KEY ("_id")
 );
