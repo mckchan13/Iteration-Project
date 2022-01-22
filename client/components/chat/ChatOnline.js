@@ -19,9 +19,14 @@ const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat }) => {
   }, [onlineUsers]);
 
   useEffect(() => {
-    setOnlineFriends(friends.filter((f)=>{friendsId.includes(f._id)}))
+    //need to parse through onlineUsers
+    setOnlineFriends(friends.filter((f) => {
+      return friendsId.includes(f._id)
+    }))
+
   }, [friendsId, friends, onlineUsers]);
 
+  
   const handleClick = async (user) => {
     try {
       
@@ -32,7 +37,7 @@ const ChatOnline = ({ onlineUsers, currUserId, setCurrentChat }) => {
   
   return (
     <div className="chatOnline">
-      {onlineFriends.map((online) => (
+      {onlineFriends && onlineFriends.map((online) => (
           <div className="chatOnlineFriend" onClick={handleClick}>
             <div className="chatOnlineImgContainer">
               <img

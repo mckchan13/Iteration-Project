@@ -46,7 +46,7 @@ const ChatPage = () => {
       console.log(users)
       setOnlineUsers(users);
     });
-  }, [user]);
+  }, [user, arrivalMessage]);
 
   useEffect(() => {
     const getConvo = async () => {
