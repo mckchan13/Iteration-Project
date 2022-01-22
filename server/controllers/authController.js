@@ -44,4 +44,25 @@ signupController.getSignupData = async (req, res, next) => {
   }
 };
 
+signupController.checkAuth = (req, res, next) => {
+  try {
+    console.log("!!!!!!!!s" + req.session.passport)
+    if (req.session && req.session.passport && req.session.passport.user) {
+      return next()
+    } else {
+      return next({
+        log: `signupController.checkAuth error: user is not authorized`,
+        status: 401,
+        message: { error: `User is not authorized` },
+      });
+    }
+  } catch (err) {
+    return next({
+      log: `signupController.checkAuth error: ${err}`,
+      status: 500,
+      message: { err: `signupController.checkAuth error: ${err}` },
+    });
+  }
+}
+
 module.exports = signupController;

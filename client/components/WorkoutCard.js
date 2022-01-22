@@ -13,7 +13,7 @@ const WorkoutCard = ({ workoutContent, date, cardAthleteId, athleteName }) => {
       {/* <div>Athlete Name: {athleteName}</div> */}
       <div>
         {athleteName}:{" "}
-        <Link to={`../athletepage/${cardAthleteId}`} className="underline">
+        <Link to={`../athletepage/`} className="underline">
           View Profile
         </Link>
       </div>

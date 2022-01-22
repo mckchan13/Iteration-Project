@@ -10,14 +10,15 @@ const AthletePage = ({ athleteId }) => {
 
   const params = useParams();
   console.log(params, "<- params");
-  if (!athleteId) athleteId = Cookies.get("athleteId");
-  if (params.athleteId) athleteId = params.athleteId;
+  // if (!athleteId) athleteId = Cookies.get("athleteId");
+  // if (params.athleteId) athleteId = params.athleteId;
   // console.log("athleteId after useParams:", athleteId);
 
   //handle get request to find the workouts for a single athlete (from the cookies athleteId set on login)
   const getWorkOutsList = () => {
+    console.log("this is WHlist", workoutsList);
     return (
-      fetch(`/api/athlete/workouts?id=${athleteId}`)
+      fetch(`/api/athlete/workouts`)
         .then((res) => res.json())
         // set state
         .then((data) => setWorkoutsList(data.workoutsList))
@@ -37,7 +38,7 @@ const AthletePage = ({ athleteId }) => {
         className="bg-neutral grid grid-cols-1 gap-6 my-5 px-4 md:px-6 lg:px-8"
       >
         <div className="bg-neutral grid grid-cols-2 gap-2 my-5 px-4 md:px-6 lg:px-8">
-          <AthleteProfile athleteId={athleteId} />
+          <AthleteProfile />
         </div>
         <Feed workoutsList={workoutsList} />
       </div>

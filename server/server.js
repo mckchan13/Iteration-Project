@@ -1,29 +1,43 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const cors = require("cors");
-const path = require("path");
-const bodyParser = require("body-parser");
-const env = require("dotenv").config();
+const cors = require('cors');
+const path = require('path');
+const bodyParser = require('body-parser');
+const env = require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const authRouter = require('./routes/authRoutes');
 const postRouter = require('./routes/postRoutes');
 const athleteRouter = require('./routes/athleteRoutes');
+const passport = require('passport');
+const Dotenv = require('dotenv-webpack');
+const session = require('express-session');
+require('./config/passport')(passport);
 
 
 /**
- * enable http request protocol 
+ * enable http request protocol
  */
 app.use(cors());
-
 
 /**
  * handle parsing request body
  */
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 3600000 }, //this is 1 hour
+  })
+);
 
-app.get("/", (req, res, next) => {
-  return res.status(200).send("the server is working");
-})
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/', (req, res, next) => {
+  return res.status(200).send('the server is working');
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/post', postRouter);
@@ -37,11 +51,12 @@ app.use((req, res) =>
 //global error middleware
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: "Express error handler caught unknown middleware error",
+    log: 'Express error handler caught unknown middleware error',
     status: 500,
-    message: { err: "An error occurred" },
+    message: { err: 'An error occurred' },
   };
   const errorObj = Object.assign({}, defaultErr, err);
+  console.log('this is the error', err);
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });

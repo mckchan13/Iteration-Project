@@ -9,10 +9,6 @@ const SignupForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(fullName);
-    // console.log(age);
-    // console.log(username);
-    // console.log(password);
     axios({
       method: 'post',
       url: '/api/auth/signup',

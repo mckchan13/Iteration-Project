@@ -47,7 +47,9 @@ const queriesRouter = {
   //entry to workout_card table in the database
 
   postWorkout: async (req, res, next) => {
-    const { athlete_id, workout_content, workout_title } = req.body;
+    console.log(req.session.passport.user)
+    const { workout_content, workout_title } = req.body;
+    const athlete_id = req.session.passport.user
     // console.log(athlete_id, workout_content, workout_title);
 
     try {
@@ -66,7 +68,7 @@ const queriesRouter = {
 
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsByAthlete: (req, res, next) => {
-    const athleteId = req.query.id;
+    const athleteId = req.session.passport.user;
     console.log(athleteId);
 
     if (athleteId === undefined) return next({ log: "no athlete_id found" });
@@ -99,7 +101,8 @@ const queriesRouter = {
 
   //gets the athlete info from the DB (just the name to start with)
   getAthleteInfo: (req, res, next) => {
-    const athleteId = req.query.id;
+    const athleteId = req.session.passport.user;
+    console.log('this is getathleteInfo', req.session.passport.user)
 
     if (athleteId === undefined) return next({ log: "no athlete_id found" });
 

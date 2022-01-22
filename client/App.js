@@ -11,6 +11,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from 'axios';
 
 import LoginSignupPage from './pages/LoginSignupPage';
 import DashBoardContainer from "./pages/DashboardContainer";
@@ -20,9 +21,27 @@ import AthletePage from "./pages/AthletePage";
 export default function App() {
   // const [authenticated, setAuthenticated] = useState(false);
   const history = useNavigate();
+  const [isAuth, setAuth] = useState(false); 
 
+  useEffect(() => {
+    
+    axios({
+      method: 'get',
+      url: '/api/auth/checkAuth',
+      withCredentials: true,
+    }).then((response) => {
+      setAuth(response.status === 200 ? true : false);
+      sessionStorage.setItem("userId","xx")
+      })
+      .catch((error) => {
+        console.log(error);
+        setAuth(false);
+      });
+  }, []);
+  
+  console.log(sessionStorage)
   const RequireAuth = ({ Component, ...rest }) => {
-    if (Cookies.get("athleteId")) {
+    if (isAuth) {
       return <Component {...rest} />;
     } else {
       return (
@@ -42,13 +61,15 @@ export default function App() {
     }
   };
 
+  console.log(sessionStorage.getItem("userId") )
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<LoginSignupPage />} />
+        <Route path="/" element={sessionStorage.getItem("userId") ? <Navigate to="/dashboard" /> : <LoginSignupPage setAuth={setAuth}/>}>
+        </Route>
 
         <Route
-          path="dashboard"
+          path="/dashboard"
           element={
             <RequireAuth Component={DashBoardContainer}>
               {/* <DashBoardContainer /> */}
@@ -57,7 +78,7 @@ export default function App() {
         />
 
         <Route
-          path="athletepage/:athleteId"
+          path="/athletepage"
           element={
             <RequireAuth Component={AthletePage}>
               {/* <AthletePage /> */}
