@@ -9,6 +9,7 @@ const Feed = ({ workoutsList }) => {
   workoutsList.forEach((workout, i) => {
     workoutCards.push(
       <WorkoutCard
+        key={`${i} WorkoutCard`}
         workoutContent={workout["workout_content"]}
         date={workout["date"]}
         cardAthleteId={workout["athlete_id"]}

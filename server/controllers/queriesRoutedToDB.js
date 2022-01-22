@@ -20,6 +20,29 @@ const queriesRouter = {
     return pool.query(text, params, callback);
   },
 
+  //gets the uique workouts list (for user has subscription already) from the DB as an array of workout objects
+  uniqueWorkoutList: async (req, res, next) => {
+    const currentUserId = req.cookies["athleteId"];
+    try {
+      const query = `SELECT a.athlete_name, w.* FROM workout_card w INNER JOIN athletes a ON w.athlete_id = a._id INNER JOIN subscription s ON w.athlete_id = s.following WHERE s.athlete_id = ${currentUserId} ORDER BY date DESC;`;
+
+      const unique = await pool.query(query);
+      console.log(unique.rows, "query from unique");
+      if (unique.rows.length === undefined) return next();
+      else {
+        res.locals.uniqueWorkoutList = unique.rows;
+        return next();
+      }
+    } catch (error) {
+      return next({
+        log: "error getting uniqueWorkoutList in database",
+        message: {
+          err: `error received from uniqueWorkoutList query: ${error}`,
+        },
+      });
+    }
+  },
+
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsList: (req, res, next) => {
     pool
@@ -88,15 +111,15 @@ const queriesRouter = {
     const { search } = req.query;
 
     try {
-      let result = {}
+      let result = {};
       const query1 = `SELECT *
         FROM workout_card
         WHERE vector @@ to_tsquery('${search}')`;
-      
+
       const query2 = `SELECT *
         FROM athletes
         WHERE athlete_name ILIKE '%${search}%'`;
-      
+
       const query3 = `SELECT *
         FROM tag
         WHERE tag ILIKE '%${search}%'`;
@@ -107,8 +130,8 @@ const queriesRouter = {
       result.workout = workoutResult.rows[0];
       result.athlete = athleteResult.rows[0];
       result.tag = tagResult.rows[0];
-      
-      res.locals.results = result
+
+      res.locals.results = result;
       return next();
     } catch (error) {
       return next({
