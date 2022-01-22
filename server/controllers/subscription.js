@@ -74,6 +74,20 @@ const subscriptionRouter = {
       });
     }
   },
+
+  getFollowed: async (req, res, next) => {
+    const { userId } = req.query
+    
+    try {
+      const query = `SELECT athletes.athlete_name FROM athletes INNER JOIN subscription ON subscription.following = athletes._id WHERE subscription.athlete_id = ${userId}`
+
+      
+      
+    } catch (error) {
+      
+    }
+
+  }
 };
 
 module.exports = subscriptionRouter;

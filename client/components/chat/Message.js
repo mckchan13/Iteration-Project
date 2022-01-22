@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/message.css";
 import { format } from "timeago.js";
 
-const Message = ({ messages, message, own }) => {
+const Message = ({ message, own }) => {
   return (
     <div className={own ? "message own" : "message"}>
       <div className="messageTop">
