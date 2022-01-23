@@ -18,7 +18,9 @@ const DashboardContainer = (props) => {
       fetch('/api/post/workoutslist')
         .then((res) => res.json())
         // set state
-        .then((data) => setWorkoutsList(data.list))
+        .then((data) => {
+          setWorkoutsList(data.list)
+        })
     );
   };
   // on mount fetch workout-list from server
