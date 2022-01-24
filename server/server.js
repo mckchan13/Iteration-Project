@@ -1,26 +1,22 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const path = require('path');
-const bodyParser = require('body-parser');
-const env = require('dotenv').config();
-const PORT = process.env.PORT || 3000;
-const authRouter = require('./routes/authRoutes');
-const postRouter = require('./routes/postRoutes');
-const athleteRouter = require('./routes/athleteRoutes');
-const passport = require('passport');
-const Dotenv = require('dotenv-webpack');
-const session = require('express-session');
-require('./config/passport')(passport);
+const cors = require("cors");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 require("dotenv").config();
+const PORT = process.env.PORT || 3000;
+const authRouter = require("./routes/authRoutes");
+const postRouter = require("./routes/postRoutes");
+const athleteRouter = require("./routes/athleteRoutes");
 const searchRouter = require("./routes/searchRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoutes");
 const conversationRouter = require("./routes/conversationRoutes");
 const messageRouter = require("./routes/messageRoutes");
 const cookieParser = require("cookie-parser");
 const socketUtil = require("./util/socketUtil.js");
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport')(passport);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -32,8 +28,38 @@ const io = new Server(httpServer, {
 app.use(express.json());
 
 app.use(cors());
+
+app.use(cookieParser());
+
+app.use(
+	session({
+		secret: process.env.SESSION_SECRET,
+		resave: false,
+		saveUninitialized: true,
+		cookie: { maxAge: 3600000 }, //this is 1 hour
+	})
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", (req, res, next) => {
+  return res.status(200).send("the server is working");
+});
+
+//
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
+app.use("/api/athlete", athleteRouter, subscriptionRouter);
+app.use("/api/search", searchRouter);
+app.use("/api/conversation", conversationRouter);
+app.use("/api/message", messageRouter);
+
+//socket.io setup
 io.on("connection", (socket) => {
+  //when connected
   console.log("a user is connected", socket.id);
+
   //displaying online users to all clients
   socket.on("addUser", (userId) => {
     socketUtil.addUser(userId, socket.id);
@@ -61,13 +87,13 @@ app.use((req, res) =>
 
 //global error middleware
 app.use((err, req, res, next) => {
+  console.log('this is err', err);
   const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
+    log: "Express error handler caught unknown middleware error",
     status: 500,
-    message: { err: 'An error occurred' },
+    message: { err: "An error occurred" },
   };
   const errorObj = Object.assign({}, defaultErr, err);
-  console.log('this is the error', err);
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });

@@ -39,33 +39,33 @@ function initialize(passport) {
     )
   );
 
-  passport.use(
-    'google',
-    new GoogleStrategy(
-      {
-        clientID: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        callbackURL: '/api/auth/google/callback',
-        passReqToCallback: true,
-      },
-      async (request, accessToken, refreshToken, profile, done) => {
-        const checkUserExist = await db.query(
-          'SELECT * from athletes WHERE email_address = $1;'
-        );
-        if (checkUserExist.rowCount === 0) {
-          try {
-            const insertGoogleUser = await db.query(
-              `INSERT into athletes (email_address, athlete_name) VALUES ($1, $2);`
-            );
-            return done(null, insertGoogleUser[0]);
-          } catch (err) {
-            return done(err);
-          }
-        }
-        return done(null, checkUserExist.rows[0]);
-      }
-    )
-  );
+  // passport.use(
+  //   'google',
+  //   new GoogleStrategy(
+  //     {
+  //       clientID: process.env.CLIENT_ID,
+  //       clientSecret: process.env.CLIENT_SECRET,
+  //       callbackURL: '/api/auth/google/callback',
+  //       passReqToCallback: true,
+  //     },
+  //     async (request, accessToken, refreshToken, profile, done) => {
+  //       const checkUserExist = await db.query(
+  //         'SELECT * from athletes WHERE email_address = $1;'
+  //       );
+  //       if (checkUserExist.rowCount === 0) {
+  //         try {
+  //           const insertGoogleUser = await db.query(
+  //             `INSERT into athletes (email_address, athlete_name) VALUES ($1, $2);`
+  //           );
+  //           return done(null, insertGoogleUser[0]);
+  //         } catch (err) {
+  //           return done(err);
+  //         }
+  //       }
+  //       return done(null, checkUserExist.rows[0]);
+  //     }
+  //   )
+  // );
 
   passport.serializeUser((user, done) => {
     console.log('this is serialize', user._id);

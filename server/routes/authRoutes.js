@@ -41,7 +41,7 @@ Router.post('/signup', signupController.getSignupData, (req, res) => {
 
 Router.post('/login', passport.authenticate('local.login'), (req, res) => {
   // console.log('this is res', res);
-  const { athlete_id } = req.user;
+  // const { athlete_id } = req.user;
   console.log('this is req.session.passport', req.session.passport)
   // console.log('this is requser', req.user._id);
   // console.log('this is reqcookies', req.cookies);
@@ -62,7 +62,7 @@ Router.post('/login', passport.authenticate('local.login'), (req, res) => {
 //   )(req, res, next);
 // });
 
-Router.get('/checkAuth', (req, res) => {
+Router.get('/checkAuth', signupController.checkAuth, (req, res) => {
   console.log(req.isAuthenticated());
   if (req.isAuthenticated())
     return res.status(200).send('authorized');

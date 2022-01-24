@@ -15,8 +15,10 @@ const subscriptionRouter = {
   //first query to check if the is relationship exit
   relationship: async (req, res, next) => {
     const currentUserId = req.session.passport.user
+    console.log('this is currentUserId', currentUserId);
 
     const currentAthletePageId = req.query.currentAthletePageId;
+    console.log('this is current athlete page id' , currentAthletePageId);
     console.log(currentUserId, currentAthletePageId)
     if (currentAthletePageId === undefined)
       return next({ log: "no currentAtheletePageId found" });
