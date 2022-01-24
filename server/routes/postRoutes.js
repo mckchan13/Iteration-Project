@@ -4,10 +4,18 @@ const Router = express.Router();
 const queriesRouter = require("../controllers/queriesRoutedToDB");
 
 //handle workouts-list query for workout cards data
-Router.get("/workoutslist", queriesRouter.getWorkoutsList, (req, res) => {
-  const { workoutsList } = res.locals;
-  return res.status(200).json({ workoutsList });
-});
+Router.get(
+  "/workoutslist",
+  queriesRouter.uniqueWorkoutList,
+  queriesRouter.getWorkoutsList,
+  (req, res) => {
+    const { workoutsList, uniqueWorkoutList } = res.locals;
+    workoutsList.filter((el) => !uniqueWorkoutList.includes(el));
+    const list = [...uniqueWorkoutList, ...workoutsList];
+    // workoutsList.unshift(...uniqueWorkoutList); 
+    return res.status(200).json({ list });
+  }
+);
 
 //handle post-workout route to add a workout to workout_card table
 Router.post("/workout", queriesRouter.postWorkout, (req, res) => {

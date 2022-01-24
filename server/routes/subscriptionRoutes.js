@@ -9,6 +9,11 @@ Router.get("/subscriptionStatusTo", subscription.relationship, (req, res) => {
   return res.status(200).json({ followingStatus });
 });
 
+Router.get("/currentFollowed", subscription.getFollowed, (req, res) => {
+  
+  return res.status(200).json({followed: res.locals.followed, following_id: res.locals.following_id });
+});
+
 //handle inserting follow relationship
 Router.post("/subscription", subscription.addFollower, (req, res) => {
   // res.locals.subscriptStatus = "Following";

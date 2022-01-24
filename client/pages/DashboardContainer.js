@@ -10,16 +10,15 @@ const DashboardContainer = (props) => {
   const [workoutsList, setWorkoutsList] = useState([]);
   const history = useNavigate();
   const athleteId = Cookies.get("athleteId");
-  
+
   //handle post function takes in nothing
   const getWorkOutsList = () => {
     return (
       fetch("/api/post/workoutslist")
         .then((res) => res.json())
         // set state
-        .then(({workoutsList}) => {
-          const parsedWorkoutsList = workoutParser(workoutsList);
-          return setWorkoutsList(parsedWorkoutsList)
+        .then((data) => {
+          setWorkoutsList(workoutParser(data.list)) //fix this workoutsParser
         })
     );
   };
@@ -42,7 +41,10 @@ const DashboardContainer = (props) => {
             My Athlete Profile
           </button>
         </div>
-        <div className="bg-neutral grid grid-cols-2 gap-2 my-6 px-4 md:px-6 lg:px-8 relative">
+        <div
+          id="main"
+          className="bg-neutral grid grid-cols-2 gap-2 my-6 px-4 md:px-6 lg:px-8 relative"
+        >
           <Feed workoutsList={workoutsList} getWorkOutsList={getWorkOutsList}/>
           <PostWorkoutContainer
             id="styling-PostWorkoutCentainer"

@@ -55,6 +55,8 @@ module.exports = {
       "/api/athlete/**": "http://localhost:3000/",
       "/api/post/**": "http://localhost:3000/",
       "/api/search/**": "http://localhost:3000/",
+      "/api/conversation/**": "http://localhost:3000/",
+      "/api/message/**": "http://localhost:3000/",
     },
   },
 };
