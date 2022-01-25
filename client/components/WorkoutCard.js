@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const WorkoutCard = ({ workoutContent, date, cardAthleteId, athleteName }) => {
-  console.log("!!!!! " + cardAthleteId)
   const roundDate = (date) => {
     return date.split("T")[0]
   }

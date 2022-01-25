@@ -1,5 +1,4 @@
 require("dotenv").config();
-console.log(process.env.CLIENT_ID)
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(
   process.env.CLIENT_ID
@@ -39,10 +38,8 @@ const authentification = {
       .query(`SELECT _id FROM athletes WHERE email_address='${email}'`)
       .then((queryData) => {
         console.log("query to select the user from athletes table ran");
-        // console.log(queryData);
         //check if an athlete entry came back and if not add the current user to the athlete table
         if (queryData.rows[0] === undefined) {
-          // console.log("I am inside the queryData");
           //this adds the user to the athlete table as an athlete entry
           pool
             .query(
@@ -77,7 +74,6 @@ const authentification = {
   //and sends that back as state from the server file
   getAthleteId: (req, res, next) => {
     const { email } = res.locals;
-    // console.log(email, "email");
     pool
       .query(`SELECT _id FROM athletes WHERE email_address='${email}';`)
       .then((athleteIdFromDB) => {

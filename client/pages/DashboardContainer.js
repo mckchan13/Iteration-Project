@@ -13,7 +13,6 @@ const DashboardContainer = (props) => {
   //need to pass userID into dashboard
   //handle post function takes in nothing
   const getWorkOutsList = () => {
-    // console.log("getworkoutlist function is being invoked");
     return (
       fetch('/api/post/workoutslist')
         .then((res) => res.json())
@@ -36,7 +35,7 @@ const DashboardContainer = (props) => {
           <h3 className="text-3xl text-center pl-5 mx-20">Dashboard</h3>
           <button
             type="submit"
-            onClick={() => history(`../athletepage/`)}
+            onClick={() => history(`../athletepage/${sessionStorage.userId}`)}
             className="bg-primary content-center text-white font-medium py-1 px-4 border  rounded-lg tracking-wide mr-1 hover:bg-gray-100 first-letter  "
           >
             My Athlete Profile

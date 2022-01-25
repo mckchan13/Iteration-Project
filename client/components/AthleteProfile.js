@@ -19,7 +19,7 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
         setAthleteName(athleteName);
       });
   });
-
+  
   useEffect(async () => {
     try {
       console.log("fetch request for subscription status");
@@ -88,7 +88,6 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
           return res.json();
         })
         .then((res) => {
-          // console.log(res);
           if (res === "Unfollow") {
             setSubscription("Follow");
           }

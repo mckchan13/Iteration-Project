@@ -20,7 +20,6 @@ const SignupForm = (props) => {
       },
     })
       .then((response) => {
-        console.log('this is response', response);
         return response;
       })
       .then((data) => {

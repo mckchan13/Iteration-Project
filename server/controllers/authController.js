@@ -15,13 +15,10 @@ signupController.getSignupData = async (req, res, next) => {
     const userData = await db.query(checkDuplicatesQuery, [
       req.body.email_address,
     ]);
-    console.log('this is rowcount', userData.rowCount);
     if (userData.rowCount === 0) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      // console.log(hashedPassword);
       userDataArray[1] = hashedPassword;
       const signupData = await db.query(signupQuery, userDataArray);
-      // console.log('this is signup data', signupData);
       return next();
     } else {
       return next({
@@ -30,11 +27,6 @@ signupController.getSignupData = async (req, res, next) => {
         message: { error: `Email is already registered` },
       });
     }
-    // console.log('this is reqbody', req.body);
-    // const signupData = await db.query(signupQuery);
-    // const signupData = await db.query(insertQuery, array);
-    // console.log(res.rows[0]);
-    // console.log('this is signupData', signupData);
   } catch (err) {
     return next({
       log: `signupController.getSignupData error: ${err}`,
@@ -46,7 +38,6 @@ signupController.getSignupData = async (req, res, next) => {
 
 signupController.checkAuth = (req, res, next) => {
   try {
-    console.log("!!!!!!!!s" + req.session.passport)
     if (req.session && req.session.passport && req.session.passport.user) {
       return next()
     } else {

@@ -7,7 +7,6 @@ const Feed = ({ workoutsList }) => {
   const workoutCards = [];
   const history = useNavigate();
   workoutsList.forEach((workout, i) => {
-    console.log("222222 " + workout["athlete_id"])
     workoutCards.push(
       <WorkoutCard
         // key={`${i} WorkoutCard`}

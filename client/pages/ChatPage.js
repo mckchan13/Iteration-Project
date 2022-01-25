@@ -104,7 +104,6 @@ const ChatPage = () => {
       };
 
       const res = await axios.post("/api/message", mess);
-      console.log(res);
       setMessages([...messages, res.data]);
       setNewMessage("");
     } catch (error) {

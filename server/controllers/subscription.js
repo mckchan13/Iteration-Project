@@ -27,6 +27,8 @@ const subscriptionRouter = {
       const checking = await pool.query(query);
       // console.log("this is the value of checking", checking);
       if (checking["rowCount"]) {
+        console.log('currentuserID', currentUserId);
+        console.log('currentAthID', currentAthletePageId);
         res.locals.followingStatus = "Following";
       } else res.locals.followingStatus = "Follow";
       return next();
