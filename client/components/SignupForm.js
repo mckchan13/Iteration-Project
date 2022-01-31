@@ -1,17 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const SignupForm = (props) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [age, setAge] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [age, setAge] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(fullName);
-    console.log(age);
-    console.log(username);
-    console.log(password);
+    axios({
+      method: 'post',
+      url: '/api/auth/signup',
+      data: {
+        email_address: username,
+        password: password,
+        athlete_name: fullName,
+        age: age,
+      },
+    })
+      .then((response) => {
+        return response;
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        alert('This email already exists');
+      });
   };
 
   return (

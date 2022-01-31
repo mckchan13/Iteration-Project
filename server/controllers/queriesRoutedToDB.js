@@ -6,28 +6,18 @@ const databaseConfig = { connectionString: process.env.DATABASE_URL };
 //creating a new pool
 const pool = new Pool(databaseConfig);
 
-// pool.query("SELECT NOW()", (err, res) => {
-//   console.log(`error: ${err}`);
-//   console.log(`response: ${JSON.parse(JSON.stringify(res))}`);
-//   console.log("Starting...");
-//   console.log(err, res);
-//   pool.end();
-// });
-
 const queriesRouter = {
   query: (text, params, callback) => {
-    console.log("executed query", text);
     return pool.query(text, params, callback);
   },
 
   //gets the uique workouts list (for user has subscription already) from the DB as an array of workout objects
   uniqueWorkoutList: async (req, res, next) => {
-    const currentUserId = req.cookies["athleteId"];
+    const currentUserId = req.session.passport.user;
     try {
       const query = `SELECT a.athlete_name, w.* FROM workout_card w INNER JOIN athletes a ON w.athlete_id = a._id INNER JOIN subscription s ON w.athlete_id = s.following WHERE s.athlete_id = ${currentUserId} ORDER BY date DESC;`;
 
       const unique = await pool.query(query);
-      // console.log(unique.rows, "query from unique");
       if (unique.rows.length === undefined) return next();
       else {
         res.locals.uniqueWorkoutList = unique.rows;
@@ -70,8 +60,8 @@ const queriesRouter = {
   //entry to workout_card table in the database
 
   postWorkout: async (req, res, next) => {
-    const { athlete_id, workout_content, workout_title } = req.body;
-    // console.log(athlete_id, workout_content, workout_title);
+    const { workout_content, workout_title } = req.body;
+    const athlete_id = req.session.passport.user
 
     try {
       const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id, vector) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}', to_tsvector('${workout_content}')) RETURNING _id; `;
@@ -89,7 +79,6 @@ const queriesRouter = {
 
   getWorkout: async (req, res, next) => {
     const { post } = req.params;
-    // console.log(athlete_id, workout_content, workout_title);
 
     try {
       const query = `SELECT *
@@ -145,11 +134,12 @@ const queriesRouter = {
 
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsByAthlete: (req, res, next) => {
-    const athleteId = req.query.id;
-    console.log(athleteId);
-
-    if (athleteId === undefined) return next({ log: "no athlete_id found" });
-
+    
+    const { athleteId } = req.params;
+    if (athleteId === undefined) 
+      athleteId = req.session.passport.user
+    // return next({ log: "no athlete_id found" });
+    
     pool
       .query(
         `SELECT a.athlete_name, w.* 
@@ -160,7 +150,6 @@ const queriesRouter = {
               ORDER BY date DESC;`
       )
       .then((workoutsListData) => {
-        // console.log(workoutsListData);
         if (!workoutsListData.rows[0])
           return next({ log: "no workouts found for this athlete" });
         res.locals.workoutsList = workoutsListData.rows;
@@ -178,7 +167,7 @@ const queriesRouter = {
 
   //gets the athlete info from the DB (just the name to start with)
   getAthleteInfo: (req, res, next) => {
-    const athleteId = req.query.id;
+    const { athleteId } = req.params;
 
     if (athleteId === undefined) return next({ log: "no athlete_id found" });
 
@@ -192,7 +181,6 @@ const queriesRouter = {
         if (!dbResponse.rows[0]) {
           return next({ log: "no athlete found with this id" });
         }
-        // console.log(dbResponse.rows[0].athlete_name);
         res.locals.athleteName = dbResponse.rows[0].athlete_name;
         return next();
       })
@@ -208,7 +196,6 @@ const queriesRouter = {
 
   postTag: async (req, res, next) => {
     const { athlete_id, workout_id, tag } = req.body;
-    console.log(athlete_id, workout_id, tag);
     try {
       const query = `INSERT INTO tag (workout_id, tag, athlete_id) VALUES ('${workout_id}', '${tag}', '${athlete_id}') RETURNING _id`;
 

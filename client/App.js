@@ -7,8 +7,10 @@ import {
   Link,
   useNavigate,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from 'axios';
 
 import LoginSignupPage from "./pages/LoginSignupPage";
 import DashBoardContainer from "./pages/DashboardContainer";
@@ -21,9 +23,25 @@ import ChatPage from "./pages/ChatPage";
 export default function App() {
   // const [authenticated, setAuthenticated] = useState(false);
   const history = useNavigate();
+  const [isAuth, setAuth] = useState(false); 
 
+  useEffect(() => {
+    sessionStorage.clear();
+    axios({
+      method: 'get',
+      url: '/api/auth/checkAuth',
+      withCredentials: true,
+    }).then((response) => {
+      setAuth(response.status === 200 ? true : false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAuth(false);
+      });
+  }, []);
+  
   const RequireAuth = ({ Component, ...rest }) => {
-    if (Cookies.get("athleteId")) {
+    if (isAuth) {
       return <Component {...rest} />;
     } else {
       return (
@@ -48,17 +66,35 @@ export default function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<LoginSignupPage />} />
+        <Route path="/" element={sessionStorage.getItem("userId") ? <Navigate to="/dashboard" /> : <LoginSignupPage setAuth={setAuth}/>}>
+        </Route>
 
         <Route
-          path="dashboard"
-          element={<RequireAuth Component={DashBoardContainer}></RequireAuth>}
+          path="/dashboard"
+          element={
+            <RequireAuth Component={DashBoardContainer}>
+              {/* <DashBoardContainer /> */}
+            </RequireAuth>
+          }
         />
 
         <Route
-          path="athletepage/:athleteId"
-          element={<RequireAuth Component={AthletePage}></RequireAuth>}
+          path="/athletepage/:athleteId"
+          element={
+            <RequireAuth Component={AthletePage}>
+              {/* <AthletePage /> */}
+            </RequireAuth>
+          }
         />
+
+        <Route
+          path="/athletepage"
+          element={
+            <RequireAuth Component={AthletePage}>
+              {/* <AthletePage /> */}
+            </RequireAuth>
+          }
+        />  
 
         <Route
           path="workoutPost/:post"

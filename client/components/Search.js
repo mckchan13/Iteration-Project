@@ -7,7 +7,6 @@ const Search = () => {
   const navigate = useNavigate()
   const handleEnter = async (e) => {
     if (e.keyCode === 13) {
-      console.log(search);
       try {
         const result = await axios.post(`/api/search?search=${search}`);
 

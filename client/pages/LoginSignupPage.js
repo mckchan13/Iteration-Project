@@ -11,7 +11,7 @@ import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
 import GoogleOAuthButton from "../components/GoogleOAuthLogin";
 
-const LoginSignupPage = (props) => {
+const LoginSignupPage = ({setAuth}) => {
   return (
     <div className="h-screen bg-cover bg-[url('https://images.pexels.com/photos/3621168/pexels-photo-3621168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')] ">
       <div className="pt-10 ">
@@ -29,7 +29,7 @@ const LoginSignupPage = (props) => {
       </div>
 
       <div className="flex flex-col justify-center items-center max-w-xl mx-auto px-4 py-4 shadow-md bg-neutral rounded-lg">
-        <LoginForm />
+        <LoginForm setAuth={setAuth}/>
         <SignupForm />
         <GoogleOAuthButton />
       </div>

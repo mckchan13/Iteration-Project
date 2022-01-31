@@ -1,13 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-const LoginForm = (props) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({setAuth}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const history = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username);
-    console.log(password);
+    axios({
+      method: 'post',
+      url: '/api/auth/login',
+      withCredentials: true,
+      data: {
+        email: username,
+        password: password,
+      },
+    })
+      .then((response) => {
+        setAuth(true);
+
+        console.log(response);
+        sessionStorage.setItem("userId",response.data.user)
+        history('dashboard');
+      })
+      .catch((error) => {
+        console.log('this is login error', error);
+      });
   };
 
   return (

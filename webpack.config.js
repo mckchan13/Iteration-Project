@@ -1,14 +1,14 @@
-const path = require("path");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const { node } = require("webpack");
-const Dotenv = require("dotenv-webpack");
+const path = require('path');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const { node } = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  entry: ["regenerator-runtime/runtime.js", "/client/index.js"],
+  entry: ['regenerator-runtime/runtime.js', '/client/index.js'],
   output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "bundle.js",
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -16,9 +16,9 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
       },
@@ -26,25 +26,25 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/i,
         exclude: /node_modules/,
         use: [
-          "style-loader",
+          'style-loader',
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           // Needed for tailwind
-          "postcss-loader",
+          'postcss-loader',
         ],
       },
     ],
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: "./client/index.html",
+      template: './client/index.html',
     }),
     new Dotenv(),
   ],
   devServer: {
     static: {
       //directory: path.resolve(__dirname, 'build'),
-      publicPath: "/build",
+      publicPath: '/build',
     },
     //historyApiFallback allows the react router to render specific pages without going server-side
     //essentially we can refresh or go forward/back from non-root domain pages and allow the react-router
