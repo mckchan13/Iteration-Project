@@ -45,11 +45,11 @@ const queriesRouter = {
 
   //gets the workouts list from the DB as an array of workout objects
   getWorkoutsList: (req, res, next) => {
-    // const query = `SELECT a.athlete_name, w.* 
-    // FROM workout_card w
-    // JOIN athletes a
-    //   ON w.athlete_id = a._id
-    // ORDER BY date DESC;`
+    const oldQuery = `SELECT a.athlete_name, w.* 
+    FROM workout_card w
+    JOIN athletes a
+      ON w.athlete_id = a._id
+    ORDER BY date DESC;`
     const newQuery = `SELECT a.athlete_name, w.*, l.likedby FROM workout_card w JOIN athletes a ON w.athlete_id = a._id FULL OUTER JOIN likes l ON w._id=l.workout_id ORDER BY date DESC`
 
     pool

@@ -21,7 +21,7 @@ const Feed = ({ workoutsList, getWorkOutsList }) => {
         likedby={workout["likedby"]}
         // comments={workout["comments"]} TO DO: Add likes to the database
         cardId={workout["_id"]}
-        key={workout["_id"]}
+        // key={workout["_id"]}
         getWorkOutsList={getWorkOutsList}
         history={history}
       ></WorkoutCard>

@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS likes (
     "workout_id" serial REFERENCES workout_card("_id") NOT NULL,
     "likedby" serial REFERENCES athletes("_id") NOT NULL,
     PRIMARY KEY ("workout_id", "likedby")
-)
+);
 
 CREATE TABLE IF NOT EXISTS conversation (
     "_id" serial NOT NULL,

@@ -9,10 +9,15 @@ Router.get(
   queriesRouter.uniqueWorkoutList,
   queriesRouter.getWorkoutsList,
   (req, res) => {
+    console.log(req.cookies)
     const { workoutsList, uniqueWorkoutList } = res.locals;
-    workoutsList.filter((el) => !uniqueWorkoutList.includes(el));
-    const list = [...uniqueWorkoutList, ...workoutsList];
-    // workoutsList.unshift(...uniqueWorkoutList); 
+    console.log('this is the workoutsList length', workoutsList.length)
+    console.log('this is the uniqueWorkoutList length', uniqueWorkoutList.length)
+    const newWorkoutsList = workoutsList.filter((el) => !uniqueWorkoutList.includes(el));
+    // const list = [...uniqueWorkoutList, ...newWorkoutsList];
+    const list = workoutsList;
+    // workoutsList.unshift(...uniqueWorkoutList);
+    console.log('this is the list length', list.length)
     return res.status(200).json({ list });
   }
 );

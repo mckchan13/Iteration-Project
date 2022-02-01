@@ -24,6 +24,7 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
       );
       console.log('the current card\'s creator is:', athleteName)
       setLiked(true)
+      getWorkOutsList()
     } else {
       const result = await axios({
         method: 'delete',
@@ -35,6 +36,7 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
       });
       console.log('the current card\'s creator is:', athleteName)
       setLiked(false);
+      getWorkOutsList();
     }
   }
 
@@ -61,10 +63,6 @@ const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId
   const roundDate = (date) => {
     return date.split("T")[0]
   }
-
-  useEffect(()=> {
-    getWorkOutsList();
-  },[liked])
 
   return (
     <div className=" bg-center max-w-xl px-4 py-4 bg-white shadow-md rounded-lg hover:bg-gray-100">
