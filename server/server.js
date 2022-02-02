@@ -14,6 +14,9 @@ const conversationRouter = require("./routes/conversationRoutes");
 const messageRouter = require("./routes/messageRoutes");
 const cookieParser = require("cookie-parser");
 const socketUtil = require("./util/socketUtil.js");
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport')(passport);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -27,6 +30,18 @@ app.use(express.json());
 app.use(cors());
 
 app.use(cookieParser());
+
+app.use(
+	session({
+		secret: process.env.SESSION_SECRET,
+		resave: false,
+		saveUninitialized: true,
+		cookie: { maxAge: 3600000 }, //this is 1 hour
+	})
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res, next) => {
   return res.status(200).send("the server is working");
@@ -72,6 +87,7 @@ app.use((req, res) =>
 
 //global error middleware
 app.use((err, req, res, next) => {
+  console.log('this is err', err);
   const defaultErr = {
     log: "Express error handler caught unknown middleware error",
     status: 500,

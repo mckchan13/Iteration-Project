@@ -14,9 +14,12 @@ const subscriptionRouter = {
 
   //first query to check if the is relationship exit
   relationship: async (req, res, next) => {
-    const currentUserId = req.cookies["athleteId"];
+    const currentUserId = req.session.passport.user
+    console.log('this is currentUserId', currentUserId);
 
     const currentAthletePageId = req.query.currentAthletePageId;
+    console.log('this is current athlete page id' , currentAthletePageId);
+    console.log(currentUserId, currentAthletePageId)
     if (currentAthletePageId === undefined)
       return next({ log: "no currentAtheletePageId found" });
     try {
@@ -24,20 +27,23 @@ const subscriptionRouter = {
       const checking = await pool.query(query);
       // console.log("this is the value of checking", checking);
       if (checking["rowCount"]) {
+        console.log('currentuserID', currentUserId);
+        console.log('currentAthID', currentAthletePageId);
         res.locals.followingStatus = "Following";
       } else res.locals.followingStatus = "Follow";
       return next();
     } catch (error) {
       return next({
         log: "error relationship subscription into the database",
-        message: { err: `error received from relationship query: ${err}` },
+        message: { err: `error received from relationship query: ${error}` },
       });
     }
   },
 
   //Insert subscription into the subscription table
   addFollower: async (req, res, next) => {
-    const { currentAthletePageId, currentUserId } = req.body;
+    const currentUserId = req.session.passport.user
+    const { currentAthletePageId } = req.body;
     console.log(
       `is log in as ${currentUserId} is trying to follow ${currentAthletePageId}`
     );
@@ -57,7 +63,8 @@ const subscriptionRouter = {
 
   //Remove subscription into the subscription table
   deleteFollower: async (req, res, next) => {
-    const { currentAthletePageId, currentUserId } = req.body;
+    const currentUserId = req.session.passport.user
+    const { currentAthletePageId } = req.body;
     console.log(
       `is log in as ${currentUserId} is trying to follow ${currentAthletePageId}`
     );

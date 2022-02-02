@@ -5,25 +5,26 @@ import Cookies from "js-cookie";
 const AthleteProfile = ({ athleteId, ...rest }) => {
   const [athleteName, setAthleteName] = useState("Awesome Athlete");
   const [subscript, setSubscription] = useState("Follow");
+  const params = useParams();
   const history = useNavigate();
-  const data = {
-    currentAthletePageId: athleteId,
-    currentUserId: Cookies.get("athleteId"),
-  };
 
+  const data = {
+    currentAthletePageId: params.athleteId
+  };
+  
   useEffect(() => {
-    fetch(`/api/athlete/info?id=${athleteId}`)
+    fetch(`/api/athlete/info/${athleteId}`)
       .then((data) => data.json())
       .then(({ athleteName }) => {
         setAthleteName(athleteName);
       });
   });
-
+  
   useEffect(async () => {
     try {
       console.log("fetch request for subscription status");
       const response = await fetch(
-        `/api/athlete/subscriptionStatusTo?currentAthletePageId=${athleteId}`,
+        `/api/athlete/subscriptionStatusTo?currentAthletePageId=${params.athleteId}`,
         {
           method: "GET",
           mode: "cors",
@@ -58,7 +59,9 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          currentAthletePageId: params.athleteId
+        }),
       });
       let res = await response.json();
       if (res === "Following") {
@@ -85,7 +88,6 @@ const AthleteProfile = ({ athleteId, ...rest }) => {
           return res.json();
         })
         .then((res) => {
-          // console.log(res);
           if (res === "Unfollow") {
             setSubscription("Follow");
           }
