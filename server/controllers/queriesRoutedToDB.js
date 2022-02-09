@@ -13,6 +13,7 @@ const queriesRouter = {
 
   //gets the uique workouts list (for user has subscription already) from the DB as an array of workout objects
   uniqueWorkoutList: async (req, res, next) => {
+    console.log(req.session.passport)
     const currentUserId = req.session.passport.user;
     try {
       const query = `SELECT a.athlete_name, w.* FROM workout_card w INNER JOIN athletes a ON w.athlete_id = a._id INNER JOIN subscription s ON w.athlete_id = s.following WHERE s.athlete_id = ${currentUserId} ORDER BY date DESC;`;
@@ -62,7 +63,7 @@ const queriesRouter = {
 
   postWorkout: async (req, res, next) => {
     const { athlete_id, workout_content, workout_title } = req.body;
-    const athlete_id = req.session.passport.user
+    // const athlete_id = req.session.passport.user
 
     try {
       // const query = `INSERT INTO workout_card (workout_content, date, workout_title, athlete_id) VALUES ('${workout_content}', NOW(), '${workout_title}', '${athlete_id}') RETURNING _id; `;
@@ -81,6 +82,7 @@ const queriesRouter = {
 
   likeWorkout: async (req, res, next) => {
     const { workout_id, athlete_id } = req.body
+    console.log('like this athlete', athlete_id)
     const likeQuery = `INSERT INTO likes (workout_id, likedby) VALUES ($1, $2);`;
     try {
       const likedPost = await pool.query(likeQuery, [ workout_id, athlete_id ])

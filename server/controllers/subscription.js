@@ -14,12 +14,10 @@ const subscriptionRouter = {
 
   //first query to check if the is relationship exit
   relationship: async (req, res, next) => {
-    const currentUserId = req.session.passport.user
-    console.log('this is currentUserId', currentUserId);
-
+    // const currentUserId = req.session.passport.user
+    // console.log('this is currentUserId', currentUserId);
+    console.log('is there a passport session', req.session?.passport?.user)
     const currentAthletePageId = req.query.currentAthletePageId;
-    console.log('this is current athlete page id' , currentAthletePageId);
-    console.log(currentUserId, currentAthletePageId)
     if (currentAthletePageId === undefined)
       return next({ log: "no currentAtheletePageId found" });
     try {
@@ -27,8 +25,6 @@ const subscriptionRouter = {
       const checking = await pool.query(query);
       // console.log("this is the value of checking", checking);
       if (checking["rowCount"]) {
-        console.log('currentuserID', currentUserId);
-        console.log('currentAthID', currentAthletePageId);
         res.locals.followingStatus = "Following";
       } else res.locals.followingStatus = "Follow";
       return next();

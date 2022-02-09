@@ -38,6 +38,7 @@ signupController.getSignupData = async (req, res, next) => {
 
 signupController.checkAuth = (req, res, next) => {
   try {
+    console.log('this is the req session', req.session)
     if (req.session && req.session.passport && req.session.passport.user) {
       return next()
     } else {

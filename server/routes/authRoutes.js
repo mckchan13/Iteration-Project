@@ -40,7 +40,7 @@ Router.post('/login', passport.authenticate('local.login'), (req, res) => {
   return res.status(200).json(req.session.passport);
 });
 
-Router.get('/checkAuth', signupController.checkAuth, (req, res) => {
+Router.get('/checkAuth', passport.authenticate('local.login'), signupController.checkAuth, (req, res) => {
   if (req.isAuthenticated())
     return res.status(200).send('authorized');
   else 

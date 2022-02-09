@@ -23,26 +23,28 @@ import ChatPage from "./pages/ChatPage";
 export default function App() {
   // const [authenticated, setAuthenticated] = useState(false);
   const history = useNavigate();
-  const [isAuth, setAuth] = useState(false); 
-
+  const [ currUser, setCurrUser ] = useState(sessionStorage.getItem('userId') ? sessionStorage.getItem('userId') : null);
+  const [isAuth, setAuth] = useState(sessionStorage.getItem('userId') ? true : false);
+  console.log(sessionStorage.getItem('userId'))
   useEffect(() => {
-    sessionStorage.clear();
+    // sessionStorage.clear();
     axios({
-      method: 'get',
+      method: 'GET',
       url: '/api/auth/checkAuth',
       withCredentials: true,
     }).then((response) => {
+      console.log('this is the response', response)
+      
       setAuth(response.status === 200 ? true : false);
       })
       .catch((error) => {
         console.log(error);
-        setAuth(false);
       });
-  }, []);
+  });
   
-  const RequireAuth = ({ Component, ...rest }) => {
+  const RequireAuth = ({ Component, currUser, setAuth }) => {
     if (isAuth) {
-      return <Component {...rest} />;
+      return <Component currUser={currUser} setAuth={setAuth} />;
     } else {
       return (
         <div className="grid place-content-center">
@@ -66,23 +68,25 @@ export default function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={sessionStorage.getItem("userId") ? <Navigate to="/dashboard" /> : <LoginSignupPage setAuth={setAuth}/>}>
-        </Route>
-
+        {/* <Route path="/" 
+        element={ isAuth ? history('dashboard') :
+          <RequireAuth Component={LoginSignupPage} setAuth={setAuth}/>
+        }/>  */}
+        <Route path="/" 
+        element={
+        <LoginSignupPage setAuth={setAuth} setCurrUser={setCurrUser}/>
+        }/> 
         <Route
           path="/dashboard"
           element={
-            <RequireAuth Component={DashBoardContainer}>
-              {/* <DashBoardContainer /> */}
-            </RequireAuth>
+            <RequireAuth Component={DashBoardContainer} currUser={currUser}/>
           }
         />
 
-        <Route
+        {/* <Route
           path="/athletepage/:athleteId"
           element={
             <RequireAuth Component={AthletePage}>
-              {/* <AthletePage /> */}
             </RequireAuth>
           }
         />
@@ -90,11 +94,9 @@ export default function App() {
         <Route
           path="/athletepage"
           element={
-            <RequireAuth Component={AthletePage}>
-              {/* <AthletePage /> */}
-            </RequireAuth>
+            <RequireAuth Component={AthletePage}/>
           }
-        />  
+        />   */}
 
         <Route
           path="workoutPost/:post"

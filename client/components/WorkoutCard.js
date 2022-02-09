@@ -6,10 +6,10 @@ import IconButton from '@mui/material/IconButton';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 
-const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId, athleteName, athleteId, picture, likedby, comments, getWorkOutsList }) => {
-  const currentUser = athleteId
+const WorkoutCard = ({ cardId, workoutTitle, workoutContent, date, cardAthleteId, athleteName, athleteId, picture, likedby, currUser, getWorkOutsList }) => {
+  const currentUser = currUser;
   const numLikes = Object.keys(likedby).length
-  const [liked, setLiked] = useState(likedby[athleteId] ? true : false);
+  const [liked, setLiked] = useState(likedby[currentUser] ? true : false);
 
   const handleLike = async (e) => {
     e.preventDefault();

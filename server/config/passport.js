@@ -1,11 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
+// const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const bcrypt = require('bcrypt');
 const db = require('../database/psqlTables');
 
 function initialize(passport) {
   const authenticateUser = async (username, password, done) => {
+    console.log('inside authenticateUser')
     const findUser = await db.query(
       'SELECT * from athletes WHERE email_address = $1;',
       [username]
@@ -14,6 +15,7 @@ function initialize(passport) {
       return done(null, false);
     }
     const localUser = findUser.rows[0];
+    console.log('this is the localUser', localUser)
     const isMatch = await bcrypt.compare(password, localUser.password);
 
     if (!isMatch) {
@@ -34,6 +36,7 @@ function initialize(passport) {
   );
 
   passport.serializeUser((user, done) => {
+    console.log('inside serializeUser', user)
     done(null, user._id); // sends back to client as hash
   });
   passport.deserializeUser((user, done) => {

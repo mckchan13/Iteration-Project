@@ -3,7 +3,7 @@ import WorkoutCard from "./WorkoutCard";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Feed = ({ workoutsList, getWorkOutsList }) => {
+const Feed = ({ workoutsList, getWorkOutsList, currUser }) => {
   // populate array with workout card components
   const athleteId = Cookies.get("athleteId");
   const workoutCards = [];
@@ -11,6 +11,7 @@ const Feed = ({ workoutsList, getWorkOutsList }) => {
   workoutsList.forEach((workout, i) => {
     workoutCards.push(
       <WorkoutCard
+        currUser={currUser}
         athleteId = {athleteId}
         workoutTitle={workout["workout_title"]}
         workoutContent={workout["workout_content"]}

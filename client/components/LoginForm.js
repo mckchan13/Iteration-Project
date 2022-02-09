@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-const LoginForm = ({setAuth}) => {
+const LoginForm = ({setAuth, setCurrUser}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,9 +21,9 @@ const LoginForm = ({setAuth}) => {
     })
       .then((response) => {
         setAuth(true);
-
         console.log(response);
         sessionStorage.setItem("userId",response.data.user)
+        setCurrUser(response.data.user)
         history('dashboard');
       })
       .catch((error) => {
