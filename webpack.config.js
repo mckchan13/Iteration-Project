@@ -57,6 +57,7 @@ module.exports = {
       "/api/search/**": "http://localhost:3000/",
       "/api/conversation/**": "http://localhost:3000/",
       "/api/message/**": "http://localhost:3000/",
+      "/graphql": "http://localhost:3000/",
     },
   },
 };

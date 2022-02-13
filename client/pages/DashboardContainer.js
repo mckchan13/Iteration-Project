@@ -13,16 +13,54 @@ const DashboardContainer = ({ currUser }) => {
   console.log('the currUser', currUser)
   //need to pass userID into dashboard
   //handle post function takes in nothing
-  const getWorkOutsList = () => {
+
+  /* original getWorkOutsList function */
+  // const getWorkOutsList = () => {
+  //   return (
+  //     fetch('/api/post/workoutslist')
+  //       .then((res) => res.json())
+  //       // set state
+  //       .then((data) => {
+  //         console.log('fetching data.list', data.list)
+  //         setWorkoutsList(workoutParser(data.list)) //fix this workoutsParser
+  //       })
+  //   );
+  // };
+  /**/
+
+ const getWorkOutsList = () => {
+
+    const getWorkoutsListQuery = `
+      query {
+          getAllWorkoutCards {
+            _id
+            workout_content
+            date
+            workout_title
+            athlete_id
+        }
+      }
+    `
     return (
-      fetch('/api/post/workoutslist')
+      fetch('/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          query: getWorkoutsListQuery,
+        })
+      })
         .then((res) => res.json())
         // set state
         .then((data) => {
-          setWorkoutsList(workoutParser(data.list)) //fix this workoutsParser
+          console.log('graphQL fetch', data)
+          // setWorkoutsList(data.getAllWorkoutCards)
         })
     );
   };
+
   // on mount fetch workout-list from server
   useEffect(() => {
     getWorkOutsList();
